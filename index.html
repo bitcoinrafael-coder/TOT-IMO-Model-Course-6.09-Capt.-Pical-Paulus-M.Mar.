@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOT IMO Model Course 6.09 — Pengembangan Instruktur Pelayaran Maritim</title>
+<style>
+:root{
+  --navy:#0a2342; --navy2:#14375e; --navy3:#1d4e89;
+  --teal:#0d9488; --teal-l:#ccfbf1;
+  --gold:#f59e0b; --gold-l:#fef3c7;
+  --purple:#7c3aed; --purple-l:#ede9fe;
+  --blue:#2563eb; --blue-l:#dbeafe;
+  --coral:#e11d48; --coral-l:#ffe4e6;
+  --green:#059669; --green-l:#d1fae5;
+  --bg:#eef2f7; --card:#ffffff; --line:#dbe3ec;
+  --txt:#12263f; --muted:#5b7290;
+  --r:14px; --shadow:0 4px 18px rgba(10,35,66,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;font-size:15px}
+
+/* ===== LAYOUT ===== */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:300px;flex-shrink:0;background:linear-gradient(180deg,var(--navy) 0%,#071a33 100%);color:#cfe0f5;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:50;display:flex;flex-direction:column;transition:transform .3s}
+.sidebar::-webkit-scrollbar{width:8px}
+.sidebar::-webkit-scrollbar-thumb{background:#2b4a72;border-radius:8px}
+.brand{padding:20px 18px 14px;border-bottom:1px solid #1c3a5e}
+.brand .imo{font-size:10px;letter-spacing:2px;color:var(--gold);font-weight:700}
+.brand h1{font-size:14.5px;color:#fff;line-height:1.4;margin-top:6px;font-weight:700}
+.brand p{font-size:11px;color:#8fb0d4;margin-top:6px;line-height:1.45}
+.brand .pres{margin-top:8px;padding:6px 9px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:7px;font-size:10.5px;color:#fcd34d;font-weight:600;line-height:1.35}
+.nav{padding:10px 12px;flex:1}
+.nav-lbl{font-size:10px;letter-spacing:1.6px;color:#6f8fb5;padding:14px 10px 6px;font-weight:700}
+.nav button,.nav a{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:0;color:#b9d0ea;padding:9px 11px;border-radius:9px;cursor:pointer;font-size:13px;font-family:inherit;transition:.18s;margin-bottom:2px;text-decoration:none}
+.nav button:hover,.nav a:hover{background:#16375c;color:#fff}
+.nav button.active{background:linear-gradient(90deg,var(--navy3),#24578f);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.nav button .ic,.nav a .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav button .arrow,.nav a .arrow{margin-left:auto;font-size:11px;opacity:.6}
+.side-foot{padding:12px 16px;border-top:1px solid #1c3a5e;font-size:11px;color:#7a99bd}
+.prog-wrap{height:6px;background:#1c3a5e;border-radius:6px;overflow:hidden;margin-top:8px}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--teal),#34d399);width:0;transition:width .4s}
+
+.main{margin-left:300px;flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:40}
+.burger{display:none;background:var(--navy);color:#fff;border:0;width:38px;height:38px;border-radius:9px;font-size:18px;cursor:pointer}
+.crumb{font-size:12.5px;color:var(--muted)}
+.crumb b{color:var(--navy)}
+.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:8px 14px;border-radius:9px;cursor:pointer;font-size:12.5px;font-family:inherit;font-weight:600;transition:.18s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:#f3f7fc;border-color:#b9cbe0}
+.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.primary:hover{background:var(--navy3)}
+.btn.teal{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn.gold{background:var(--gold);color:#3a2600;border-color:var(--gold)}
+.btn.sm{padding:5px 10px;font-size:11.5px}
+.content{padding:24px;max-width:1180px;width:100%}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;border:1px solid #e6edf5}
+.card h2{font-size:20px;color:var(--navy);margin-bottom:6px;line-height:1.3}
+.card h3{font-size:16px;color:var(--navy2);margin:20px 0 10px}
+.card h4{font-size:14px;color:var(--navy3);margin:16px 0 8px}
+.sub{color:var(--muted);font-size:13px}
+
+/* ===== HERO ===== */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#173f6b 55%,#0d9488 140%);color:#fff;border-radius:var(--r);padding:32px 28px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero::after{content:'⚓';position:absolute;right:24px;bottom:-30px;font-size:150px;opacity:.07}
+.hero .tag{display:inline-block;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.5);color:#fcd34d;font-size:10.5px;letter-spacing:2px;padding:4px 12px;border-radius:20px;font-weight:700}
+.hero h1{font-size:26px;margin:14px 0 8px;line-height:1.25}
+.hero p{color:#c3d9f0;font-size:14px;max-width:760px}
+.hero .pres-box{margin-top:18px;padding:10px 15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;display:inline-block}
+.hero .pres-box b{color:#fcd34d;display:block;font-size:12px;letter-spacing:1.5px;margin-bottom:3px}
+.hero .pres-box span{color:#fff;font-size:15px;font-weight:600}
+.hero .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:#a8c6e4}
+.hero .meta span b{color:#fff;display:block;font-size:15px;margin-bottom:2px}
+
+/* ===== GRID ===== */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+/* ===== STAT ===== */
+.stat{background:#fff;border-radius:12px;padding:18px;border:1px solid var(--line);border-left:4px solid var(--teal)}
+.stat .n{font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+.stat .l{font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.6px}
+
+/* ===== MODULE CARD ===== */
+.mod-card{background:#fff;border-radius:12px;border:1px solid var(--line);padding:18px;cursor:pointer;transition:.2s;display:flex;flex-direction:column;gap:8px;position:relative}
+.mod-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(10,35,66,.12);border-color:#b8cde4}
+.mod-card .mnum{font-size:10.5px;font-weight:800;letter-spacing:1.4px;color:var(--teal)}
+.mod-card .mt{font-size:15px;font-weight:700;color:var(--navy);line-height:1.35}
+.mod-card .mp{font-size:12px;color:var(--muted)}
+.mod-card .mfoot{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);padding-top:8px;border-top:1px dashed var(--line)}
+.chk{width:18px;height:18px;border-radius:50%;border:2px solid #c3d4e6;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.chk.on{background:var(--teal);border-color:var(--teal)}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:6px;background:#fff;padding:6px;border-radius:12px;border:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+.tab{flex:1;min-width:150px;border:0;background:transparent;padding:11px 14px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);transition:.18s;display:flex;align-items:center;gap:8px;justify-content:center}
+.tab:hover{background:#f2f7fc}
+.tab.active{color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.tab[data-t="pedagogi"].active{background:var(--blue)}
+.tab[data-t="andragogi"].active{background:var(--teal)}
+.tab[data-t="heutagogi"].active{background:var(--purple)}
+.panel{display:none;animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== QUESTION BOX ===== */
+.qbox{border-radius:12px;padding:18px 20px;margin-bottom:18px;border-left:5px solid}
+.qbox.blue{background:var(--blue-l);border-color:var(--blue)}
+.qbox.teal{background:var(--teal-l);border-color:var(--teal)}
+.qbox.purple{background:var(--purple-l);border-color:var(--purple)}
+.qbox .qlab{font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;opacity:.75}
+.qbox p{font-size:15px;font-weight:700;color:var(--navy);line-height:1.45}
+
+/* ===== CONTENT BLOCKS ===== */
+.blk{border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin-bottom:14px;background:#fdfefe}
+.blk h4{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--navy);margin:0 0 10px}
+.blk h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.blk ul{margin:0;padding-left:20px}
+.blk li{margin-bottom:7px;font-size:13.8px;color:#243b57}
+.blk li::marker{color:var(--teal)}
+
+/* ===== REF (klik kata → popup) ===== */
+.ref{color:var(--navy3);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--teal);padding:0 1px;transition:.15s;background:linear-gradient(to top, rgba(13,148,136,.08) 0%, transparent 60%)}
+.ref:hover{background:var(--teal-l);color:var(--teal)}
+
+/* ===== TABLE ===== */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;background:#fff;border-radius:10px;overflow:hidden}
+.tbl th{background:var(--navy);color:#fff;text-align:left;padding:11px 13px;font-size:11.5px;letter-spacing:.5px;font-weight:700}
+.tbl td{padding:10px 13px;border-bottom:1px solid #eaf0f7;vertical-align:top;color:#26405e}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr:nth-child(even) td{background:#f8fbfe}
+
+/* ===== SCENARIO ===== */
+.scen{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:11px;padding:16px 18px;margin-bottom:14px}
+.scen .st{font-size:11px;font-weight:800;letter-spacing:1.2px;color:#b45309;text-transform:uppercase;margin-bottom:6px}
+.scen p{font-size:13.6px;color:#28405d;margin-bottom:10px}
+.scen .task{background:#fffbeb;border-radius:8px;padding:10px 13px;font-size:13px;color:#5c4708}
+.scen .task b{color:#92400e}
+
+/* ===== PROJECT ===== */
+.proj{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin-bottom:14px;border-top:4px solid var(--purple)}
+.proj .pt{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.proj p{font-size:13.5px;color:#3a5270;margin-bottom:9px}
+.proj .out{font-size:12.5px;background:var(--purple-l);color:#4c1d95;padding:9px 12px;border-radius:8px}
+.proj .out b{color:#5b21b6}
+
+/* ===== NOTES ===== */
+.notes{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:13px;font-family:inherit;font-size:13.5px;resize:vertical;background:#fbfdff;color:var(--txt)}
+.notes:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.save-hint{font-size:11.5px;color:var(--teal);margin-top:6px;height:16px}
+
+/* ===== QUIZ ===== */
+.qq{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+.qq .qn{font-size:11px;font-weight:800;color:var(--teal);letter-spacing:1px;margin-bottom:6px}
+.qq .qt{font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:12px;line-height:1.45}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;margin-bottom:7px;cursor:pointer;font-size:13.5px;transition:.15s;background:#fcfdff}
+.opt:hover{background:#f2f8fd;border-color:#b9cfe6}
+.opt input{margin-top:3px;accent-color:var(--teal);flex-shrink:0}
+.opt.correct{background:#d1fae5;border-color:#34d399;font-weight:600}
+.opt.wrong{background:#fee2e2;border-color:#f87171}
+.opt.lock{cursor:default}
+.score-box{background:linear-gradient(135deg,var(--navy),var(--navy3));color:#fff;border-radius:12px;padding:26px;text-align:center;margin-bottom:18px}
+.score-box .big{font-size:46px;font-weight:800;line-height:1}
+.score-box p{color:#c3d9f0;margin-top:8px;font-size:14px}
+
+/* ===== CHECKLIST ===== */
+.cl-item{display:flex;gap:11px;align-items:flex-start;padding:11px 14px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fdfeff;font-size:13.6px;cursor:pointer;transition:.15s}
+.cl-item:hover{background:#f4f9fd}
+.cl-item input{margin-top:3px;accent-color:var(--teal);width:16px;height:16px;flex-shrink:0;cursor:pointer}
+.cl-item.done{background:#f0fdf9;border-color:#a7f3d0;text-decoration:line-through;color:#4b7d70}
+
+/* ===== DB TABLE ===== */
+.search{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:14px;margin-bottom:16px;background:#fff}
+.search:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.4px}
+.pill.p{background:var(--blue-l);color:#1e40af}
+.pill.a{background:var(--teal-l);color:#115e59}
+.pill.h{background:var(--purple-l);color:#5b21b6}
+.pill.i{background:var(--coral-l);color:#9f1239}
+.pill.g{background:var(--green-l);color:#065f46}
+
+/* ===== MATRIX ===== */
+.matrix{display:grid;grid-template-columns:170px repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.matrix>div{background:#fff;padding:13px 14px;font-size:12.8px;color:#28405d}
+.matrix .mh{background:var(--navy);color:#fff;font-weight:700;font-size:12px;letter-spacing:.4px;text-align:center}
+.matrix .mrh{background:#f1f6fb;font-weight:700;color:var(--navy);font-size:12.5px}
+
+/* ===== MISC ===== */
+.callout{background:var(--gold-l);border-left:5px solid var(--gold);border-radius:10px;padding:14px 17px;font-size:13.5px;color:#5c4708;margin:14px 0}
+.callout b{color:#92400e}
+.quote{font-style:italic;color:var(--muted);border-left:3px solid var(--gold);padding-left:14px;margin:16px 0;font-size:14px}
+.quote span{display:block;font-style:normal;font-size:12px;color:var(--navy);margin-top:6px;font-weight:600}
+.flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mt{margin-top:16px}.mb{margin-bottom:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(6,20,38,.55);z-index:45}
+.overlay.on{display:block}
+
+/* ===== POPUP MODAL ===== */
+.popup-bg{display:none;position:fixed;inset:0;background:rgba(6,20,38,.65);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.popup-bg.on{display:flex;animation:fade .2s ease}
+.popup{background:#fff;border-radius:16px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.4);animation:pop .3s cubic-bezier(.2,1.2,.4,1)}
+@keyframes pop{from{transform:scale(.94) translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.popup-head{background:linear-gradient(135deg,var(--navy),var(--navy3));color:#fff;padding:22px 26px 18px;position:sticky;top:0;z-index:1}
+.popup-head .ptag{font-size:10px;letter-spacing:2px;color:#fcd34d;font-weight:700}
+.popup-head h2{font-size:21px;margin-top:6px;line-height:1.25;color:#fff}
+.popup-head .psub{font-size:12.5px;color:#a8c6e4;margin-top:5px;line-height:1.5}
+.popup-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);border:0;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;transition:.15s}
+.popup-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.popup-body{padding:22px 26px 26px}
+.popup-body p{font-size:14px;color:#2c4562;margin-bottom:14px;line-height:1.7}
+.popup-links{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.popup-links a{display:flex;align-items:center;gap:11px;padding:12px 15px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--navy);font-size:13.5px;font-weight:600;transition:.15s;background:#fbfdff}
+.popup-links a:hover{background:var(--teal-l);border-color:var(--teal);transform:translateX(3px)}
+.popup-links a .lic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--blue-l);color:var(--blue)}
+.popup-links a.g .lic{background:#fef3c7;color:#92400e}
+.popup-links a.i .lic{background:var(--green-l);color:var(--green)}
+.popup-links a.w .lic{background:#e0e7ff;color:#3730a3}
+.popup-links a .lmeta{margin-left:auto;font-size:10.5px;color:var(--muted);font-weight:500}
+.related{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.related b{font-size:11px;letter-spacing:1.3px;color:var(--muted);text-transform:uppercase}
+.related .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.related .tags button{background:#f0f5fb;border:1px solid var(--line);color:var(--navy2);padding:5px 11px;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;transition:.15s}
+.related .tags button:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+/* ===== GLOSSARY CARDS ===== */
+.gloss-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;cursor:pointer;transition:.18s;border-left:4px solid var(--teal)}
+.gloss-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,35,66,.1);border-left-color:var(--gold)}
+.gloss-card .gt{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.gloss-card .gf{font-size:11.5px;color:var(--muted);margin-bottom:8px;font-style:italic}
+.gloss-card .gd{font-size:12.8px;color:#3a5270;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gloss-card .gaction{margin-top:10px;font-size:11.5px;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:5px}
+
+/* ===== FLOATING GLOSSARY BUTTON ===== */
+.fab{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,var(--teal),var(--navy3));color:#fff;border:0;width:58px;height:58px;border-radius:50%;cursor:pointer;font-size:22px;box-shadow:0 8px 24px rgba(13,148,136,.4);z-index:60;transition:.2s;display:flex;align-items:center;justify-content:center}
+.fab:hover{transform:scale(1.08) rotate(-8deg);box-shadow:0 12px 30px rgba(13,148,136,.55)}
+
+@media(max-width:960px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .burger{display:block}
+  .content{padding:16px}
+  .hero{padding:22px 18px}
+  .hero h1{font-size:20px}
+  .topbar{padding:10px 14px}
+  .card{padding:18px}
+  .matrix{grid-template-columns:1fr}
+  .matrix .mh,.matrix .mrh{text-align:left}
+}
+@media print{
+  .sidebar,.topbar,.overlay,.fab,.no-print{display:none!important}
+  .main{margin-left:0}
+  .panel{display:block!important}
+  .card{box-shadow:none;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== POPUP MODAL ===== -->
+<div class="popup-bg" id="popupBg" onclick="if(event.target===this)closePopup()">
+  <div class="popup" id="popupBox">
+    <div class="popup-head" style="position:relative">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+      <div class="ptag" id="popTag">REFERENSI</div>
+      <h2 id="popTitle">—</h2>
+      <div class="psub" id="popSub">—</div>
+    </div>
+    <div class="popup-body">
+      <p id="popDesc">—</p>
+      <div class="popup-links" id="popLinks"></div>
+      <div class="related" id="popRelated"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FLOATING GLOSSARY ===== -->
+<button class="fab no-print" onclick="go('glosarium')" title="Buka Glosarium & Referensi">📖</button>
+
+<div class="shell">
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="imo">IMO MODEL COURSE 6.09 · TOT</div>
+      <h1>Pengembangan Instruktur Pelayaran Maritim</h1>
+      <p>Disusun untuk Pengembangan Instruktur Berbasis TOT 6.09</p>
+      <div class="pres">
+        <div>PRESENTED BY</div>
+        Capt. Pical Paulus, M.Mar.
+      </div>
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+
+    <div class="side-foot">
+      <div class="flex" style="justify-content:space-between">
+        <span>Progres Belajar</span>
+        <b id="progTxt" style="color:#fff">0%</b>
+      </div>
+      <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+    <div class="topbar">
+      <button class="burger" onclick="toggleSidebar()">☰</button>
+      <div class="crumb" id="crumb">Dashboard</div>
+      <div class="top-actions no-print">
+        <button class="btn" onclick="go('glosarium')">📖 Glosarium</button>
+        <button class="btn" onclick="window.print()">🖨️ Cetak</button>
+        <button class="btn primary" onclick="resetAll()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="content" id="app"></div>
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   KONFIGURASI KURSUS
+   ============================================================ */
+const COURSE = {
+  code:"IMO Model Course 6.09",
+  title:"Training Course for Instructors (TOT)",
+  appTitle:"Pengembangan Instruktur Pelayaran Maritim",
+  subtitle:"Disusun untuk Pengembangan Instruktur Berbasis TOT 6.09",
+  edition:"2012 Edition — STCW including 2010 Manila Amendments",
+  presenter:"Capt. Pical Paulus, M.Mar.",
+  venue:"Jakarta, 12 Oktober 2026"
+};
+
+/* ============================================================
+   DATABASE REFERENSI EKSTERNAL (untuk popup & navbar)
+   ============================================================ */
+const REFS = {
+  "IMO":{
+    title:"IMO — International Maritime Organization",
+    full:"Badan khusus PBB yang mengatur keselamatan dan keamanan pelayaran serta pencegahan pencemaran laut.",
+    desc:"IMO dibentuk tahun 1948 (sebagai IMCO) dan mulai berlaku 1959. Berkedudukan di London, Inggris. IMO menetapkan standar global untuk keselamatan pelayaran, keamanan maritim, dan perlindungan lingkungan laut melalui berbagai konvensi (SOLAS, MARPOL, STCW, ISM Code, dll).",
+    links:[
+      {t:"Website Resmi IMO",u:"https://www.imo.org/",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"IMO di Google",u:"https://www.google.com/search?q=International+Maritime+Organization+IMO",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"IMO di Wikipedia",u:"https://en.wikipedia.org/wiki/International_Maritime_Organization",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["SOLAS","MARPOL","STCW","ISM Code","ISPS Code"]
+  },
+  "STCW":{
+    title:"STCW Convention",
+    full:"International Convention on Standards of Training, Certification and Watchkeeping for Seafarers",
+    desc:"Konvensi IMO yang menetapkan standar minimum pelatihan, sertifikasi, dan dinas jaga bagi pelaut di seluruh dunia. Diadopsi 7 Juli 1978, berlaku 28 April 1984. Direvisi besar 1995 (lahir STCW Code) dan diamandemen di Manila 2010 (berlaku 1 Jan 2012).",
+    links:[
+      {t:"STCW di IMO Resmi",u:"https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Conv-Link.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'STCW Convention' di Google",u:"https://www.google.com/search?q=STCW+Convention+IMO+1978+Manila+Amendments",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"STCW di Wikipedia",u:"https://en.wikipedia.org/wiki/STCW_Convention",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["IMO","Manila Amendments","STCW Code","CBT"]
+  },
+  "STCW Code":{
+    title:"STCW Code",
+    full:"Kode STCW — Part A (Mandatory) & Part B (Guidance)",
+    desc:"Kode STCW diperkenalkan melalui revisi 1995. Part A memuat ketentuan WAJIB (standar kompetensi, persyaratan pelatihan, sertifikasi, asesmen, kualifikasi instruktur). Part B memuat PEDOMAN pelaksanaan bagi Pemerintah, Lembaga Diklat, Instruktur, Asesor, dan Perusahaan Pelayaran.",
+    links:[
+      {t:"STCW Code di IMO",u:"https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Conv-Link.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'STCW Code Part A Part B' di Google",u:"https://www.google.com/search?q=STCW+Code+Part+A+Part+B+IMO",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["STCW","Section A-I/6","Section A-I/8"]
+  },
+  "SOLAS":{
+    title:"SOLAS — Safety of Life at Sea",
+    full:"International Convention for the Safety of Life at Sea",
+    desc:"Konvensi IMO tentang keselamatan jiwa di laut. Versi pertama 1914 (pasca Titanic), versi berlaku saat ini SOLAS 1974. Terdiri dari berbagai Bab, termasuk Bab IX (Management for the Safe Operation of Ships) yang mewajibkan ISM Code.",
+    links:[
+      {t:"SOLAS di IMO Resmi",u:"https://www.imo.org/en/OurWork/Safety/Pages/SafetyOfLifeAtSea.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'SOLAS Chapter IX' di Google",u:"https://www.google.com/search?q=SOLAS+1974+Chapter+IX+Management+Safe+Operation+Ships",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"SOLAS di Wikipedia",u:"https://en.wikipedia.org/wiki/SOLAS_Convention",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["Bab IX","ISM Code","IMO"]
+  },
+  "MARPOL":{
+    title:"MARPOL 73/78",
+    full:"International Convention for the Prevention of Pollution from Ships",
+    desc:"Konvensi IMO untuk pencegahan pencemaran laut dari kapal. Terdiri dari 6 Annex: Annex I (Oil), Annex II (Noxious Liquid Substances), Annex III (Harmful Substances in Packaged Form), Annex IV (Sewage), Annex V (Garbage), Annex VI (Air Pollution).",
+    links:[
+      {t:"MARPOL di IMO Resmi",u:"https://www.imo.org/en/OurWork/Environment/Pages/Pollution-Prevention.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'MARPOL Annex I-VI' di Google",u:"https://www.google.com/search?q=MARPOL+73/78+Annex+I+II+III+IV+V+VI",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"MARPOL di Wikipedia",u:"https://en.wikipedia.org/wiki/MARPOL_73/78",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["Annex I","Annex VI","Pencemaran","IMO"]
+  },
+  "ISM Code":{
+    title:"ISM Code",
+    full:"International Safety Management Code",
+    desc:"Standar internasional untuk manajemen dan pengoperasian kapal secara aman serta pencegahan pencemaran. Diwajibkan melalui amendemen SOLAS 1994, berlaku 1 Juli 1998. Mewajibkan perusahaan pelayaran menerapkan Sistem Manajemen Keselamatan (SMS).",
+    links:[
+      {t:"ISM Code di IMO Resmi",u:"https://www.imo.org/en/OurWork/HumanElement/Pages/ISMCode.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'ISM Code' di Google",u:"https://www.google.com/search?q=ISM+Code+International+Safety+Management+IMO",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"ISM Code di Wikipedia",u:"https://en.wikipedia.org/wiki/International_Safety_Management_Code",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["SOLAS Bab IX","SMS","DPA","DOC","SMC"]
+  },
+  "SMS":{
+    title:"SMS — Safety Management System",
+    full:"Sistem Manajemen Keselamatan",
+    desc:"Sistem dan prosedur yang diterapkan perusahaan pelayaran dan kapal untuk memastikan keselamatan operasi dan pencegahan pencemaran, sesuai persyaratan ISM Code. Meliputi kebijakan keselamatan, prosedur kerja, instruksi, dan dokumentasi.",
+    links:[
+      {t:"Cari 'Safety Management System ISM' di Google",u:"https://www.google.com/search?q=Safety+Management+System+SMS+ISM+Code+ship",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"SMS di Wikipedia",u:"https://en.wikipedia.org/wiki/Safety_management_system",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["ISM Code","DOC","SMC"]
+  },
+  "DPA":{
+    title:"DPA — Designated Person Ashore",
+    full:"Penghubung antara kapal dan manajemen darat",
+    desc:"Peran yang diwajibkan ISM Code. DPA adalah penghubung kapal–darat serta pemantau aspek keselamatan dan pencegahan pencemaran. Memastikan SMS diterapkan, memantau sumber daya, dan menangani laporan ketidaksesuaian.",
+    links:[
+      {t:"Cari 'Designated Person Ashore DPA' di Google",u:"https://www.google.com/search?q=Designated+Person+Ashore+DPA+ISM+Code",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["ISM Code","SMS","Company"]
+  },
+  "DOC":{
+    title:"DOC — Document of Compliance",
+    full:"Sertifikat untuk PERUSAHAAN",
+    desc:"Sertifikat yang diterbitkan untuk perusahaan pelayaran yang telah memenuhi persyaratan ISM Code. Diterbitkan setelah audit oleh Administration atau Recognized Organization. Masa berlaku umumnya 5 tahun dengan verifikasi tahunan.",
+    links:[
+      {t:"Cari 'Document of Compliance DOC ISM' di Google",u:"https://www.google.com/search?q=Document+of+Compliance+DOC+ISM+Code+ship",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["ISM Code","SMC","Company"]
+  },
+  "SMC":{
+    title:"SMC — Safety Management Certificate",
+    full:"Sertifikat untuk KAPAL",
+    desc:"Sertifikat yang diterbitkan untuk kapal yang telah memenuhi persyaratan ISM Code. Diterbitkan setelah audit oleh Administration atau Recognized Organization. Masa berlaku umumnya 5 tahun dengan verifikasi antara.",
+    links:[
+      {t:"Cari 'Safety Management Certificate SMC' di Google",u:"https://www.google.com/search?q=Safety+Management+Certificate+SMC+ISM+Code+ship",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["ISM Code","DOC","Kapal"]
+  },
+  "ISPS Code":{
+    title:"ISPS Code",
+    full:"International Ship and Port Facility Security Code",
+    desc:"Kode IMO tentang keamanan kapal dan fasilitas pelabuhan. Berbeda dengan ISM Code (keselamatan operasi & pencemaran), ISPS Code fokus pada KEAMANAN (security) dari ancaman seperti terorisme, pembajakan, dan penyusupan.",
+    links:[
+      {t:"ISPS Code di IMO Resmi",u:"https://www.imo.org/en/OurWork/Security/Pages/SOLAS-XI-2%20ISPS%20Code.aspx",ic:"🌐",cls:"i",meta:"imo.org"},
+      {t:"Cari 'ISPS Code' di Google",u:"https://www.google.com/search?q=ISPS+Code+International+Ship+Port+Facility+Security",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"ISPS di Wikipedia",u:"https://en.wikipedia.org/wiki/International_Ship_and_Port_Facility_Security_Code",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["IMO","SOLAS XI-2","Security"]
+  },
+  "Annex":{
+    title:"Annex (dalam konvensi IMO)",
+    full:"Lampiran teknis yang menjadi bagian tidak terpisahkan dari konvensi",
+    desc:"Dalam konvensi IMO (seperti MARPOL, SOLAS), Annex adalah lampiran teknis yang memuat ketentuan rinci. Contoh MARPOL Annex I (Oil), Annex VI (Air Pollution). Annex bersifat mengikat bagi negara pihak yang meratifikasi.",
+    links:[
+      {t:"Cari 'MARPOL Annex' di Google",u:"https://www.google.com/search?q=MARPOL+Annex+I+II+III+IV+V+VI+IMO",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"Penjelasan Annex di IMO",u:"https://www.imo.org/en/About/Conventions/Pages/Default.aspx",ic:"🌐",cls:"i",meta:"imo.org"}
+    ],
+    tags:["MARPOL","SOLAS","IMO"]
+  },
+  "Manila Amendments":{
+    title:"Manila Amendments 2010",
+    full:"Amandemen Manila terhadap STCW 1978",
+    desc:"Amandemen besar STCW yang disahkan di Manila, Filipina, 2010. Berisi pembaruan: leadership & teamwork, security awareness, ECDIS, ETO/ETR, refresher training, standar kesehatan, jam kerja/istirahat, pencegahan alkohol-narkoba. Berlaku 1 Januari 2012, diterapkan penuh 1 Januari 2017.",
+    links:[
+      {t:"Cari 'Manila Amendments STCW 2010' di Google",u:"https://www.google.com/search?q=Manila+Amendments+2010+STCW+IMO",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"STCW di IMO",u:"https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Conv-Link.aspx",ic:"🌐",cls:"i",meta:"imo.org"}
+    ],
+    tags:["STCW","ECDIS","ETO","2010"]
+  },
+  "ECDIS":{
+    title:"ECDIS",
+    full:"Electronic Chart Display and Information System",
+    desc:"Sistem tampilan peta elektronik dan informasi. Menjadi kompetensi wajib bagi perwira navigasi berdasarkan Amandemen Manila 2010. Menggantikan peta kertas sebagai alat navigasi utama.",
+    links:[
+      {t:"Cari 'ECDIS' di Google",u:"https://www.google.com/search?q=ECDIS+Electronic+Chart+Display+Information+System+IMO",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"ECDIS di Wikipedia",u:"https://en.wikipedia.org/wiki/Electronic_chart_display_and_information_system",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["STCW","Manila Amendments","Navigasi"]
+  },
+  "CBT":{
+    title:"CBT — Competence Based Training",
+    full:"Pelatihan berbasis kompetensi",
+    desc:"Pendekatan pelatihan yang berfokus pada pencapaian kompetensi tertentu (Knowledge, Skill, Attitude), bukan pada lamanya mengikuti pelatihan. Dasar hukum: STCW Convention & STCW Code Section A-I/6.",
+    links:[
+      {t:"Cari 'Competence Based Training STCW' di Google",u:"https://www.google.com/search?q=Competence+Based+Training+STCW+maritime",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["STCW","Section A-I/6","KSA"]
+  },
+  "KUP":{
+    title:"KUP — Knowledge, Understanding & Proficiency",
+    full:"Elemen dalam tabel kompetensi STCW",
+    desc:"KUP adalah salah satu dari 4 elemen tabel kompetensi STCW (Competence – KUP – Methods for Demonstrating Competence – Criteria for Evaluating Competence). Memuat materi yang harus dipelajari untuk mencapai kompetensi tertentu.",
+    links:[
+      {t:"Cari 'STCW Table Competence KUP' di Google",u:"https://www.google.com/search?q=STCW+Table+Competence+Knowledge+Understanding+Proficiency",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["STCW","Kompetensi","Tabel"]
+  },
+  "Section A-I/6":{
+    title:"STCW Code Section A-I/6",
+    full:"Training and Assessment",
+    desc:"Section STCW Code Part A yang mengatur pelatihan dan asesmen. Mewajibkan: pelatihan oleh Instruktur berkualifikasi, asesmen oleh Assessor kompeten, metode sesuai, dan bukti kompetensi yang dapat dipertanggungjawabkan.",
+    links:[
+      {t:"Cari 'STCW Section A-I/6' di Google",u:"https://www.google.com/search?q=STCW+Code+Section+A-I/6+Training+Assessment",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"STCW di IMO",u:"https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Conv-Link.aspx",ic:"🌐",cls:"i",meta:"imo.org"}
+    ],
+    tags:["STCW Code","Instruktur","Asesor"]
+  },
+  "Section A-I/8":{
+    title:"STCW Code Section A-I/8",
+    full:"Quality Standards",
+    desc:"Section STCW Code Part A yang mengatur Sistem Standar Mutu. Mewajibkan lembaga diklat menerapkan Sistem Manajemen Mutu agar seluruh faktor pembelajaran dikelola secara konsisten.",
+    links:[
+      {t:"Cari 'STCW Section A-I/8 Quality Standards' di Google",u:"https://www.google.com/search?q=STCW+Code+Section+A-I/8+Quality+Standards",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["STCW Code","Mutu","Lembaga Diklat"]
+  },
+  "OICNW":{
+    title:"OICNW",
+    full:"Officer in Charge of a Navigational Watch",
+    desc:"Perwira yang bertanggung jawab atas dinas jaga navigasi. Harus mampu merencanakan dan melaksanakan navigasi sesuai standar kompetensi STCW Chapter II.",
+    links:[
+      {t:"Cari 'OICNW STCW' di Google",u:"https://www.google.com/search?q=OICNW+Officer+In+Charge+Navigational+Watch+STCW",ic:"🔍",cls:"g",meta:"Google"}
+    ],
+    tags:["STCW","Navigasi","Chapter II"]
+  },
+  "Andragogy":{
+    title:"Andragogy",
+    full:"Teori pembelajaran orang dewasa (Malcolm Knowles)",
+    desc:"Pendekatan pembelajaran yang berfokus pada peserta sebagai pembelajar mandiri yang membawa pengalaman. Berbeda dari pedagogi (pembelajaran anak). Menekankan relevansi, pengalaman, dan keterlibatan aktif.",
+    links:[
+      {t:"Cari 'Andragogy Malcolm Knowles' di Google",u:"https://www.google.com/search?q=Andragogy+Malcolm+Knowles+adult+learning",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"Andragogy di Wikipedia",u:"https://en.wikipedia.org/wiki/Andragogy",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["Pedagogi","Heutagogi","Pembelajaran"]
+  },
+  "Heutagogi":{
+    title:"Heutagogy",
+    full:"Self-determined learning",
+    desc:"Pendekatan pembelajaran di mana peserta MENENTUKAN SENDIRI cara belajarnya dan menciptakan solusi. Merupakan pengembangan dari andragogi — fokus pada kapasitas belajar mandiri seumur hidup (lifelong learning).",
+    links:[
+      {t:"Cari 'Heutagogy Self-Determined Learning' di Google",u:"https://www.google.com/search?q=Heutagogy+self-determined+learning",ic:"🔍",cls:"g",meta:"Google"},
+      {t:"Heutagogy di Wikipedia",u:"https://en.wikipedia.org/wiki/Heutagogy",ic:"📚",cls:"w",meta:"Wikipedia"}
+    ],
+    tags:["Andragogy","Pedagogi","Pembelajaran"]
+  }
+};
+
+/* ============================================================
+   MODULES
+   ============================================================ */
+const MODULES = [
+{
+  id:"m1", num:1, icon:"⚓", pages:"Hal. 6–16",
+  title:"Gambaran Umum & Perkembangan Konvensi dan Kode STCW",
+  en:"Understand the Overview and Development of the STCW Convention and Code",
+  summary:"Sejarah, struktur, tujuan, dan tonggak perkembangan STCW 1978 → 1995 → Amandemen Manila 2010.",
+  objectives:["Menjelaskan pengertian dan tujuan Konvensi STCW.","Menguraikan sejarah perkembangan Konvensi dan Kode STCW.","Menjelaskan struktur Konvensi STCW dan Kode STCW.","Menjelaskan perubahan penting Amandemen 1995 dan Amandemen Manila 2010.","Menjelaskan penerapan STCW dalam pendidikan, pelatihan, sertifikasi, dan dinas jaga pelaut."],
+  pedagogy:{intro:"Fokus: memastikan peserta MEMAHAMI struktur, sejarah, dan logika di balik STCW — bukan sekadar menghafal tahun.",blocks:[
+    {h:"1. Konsep Dasar STCW",items:["<ref>STCW</ref> = International Convention on Standards of Training, Certification and Watchkeeping for Seafarers.","Disusun oleh <ref>IMO</ref> (International Maritime Organization) di London.","Menetapkan standar minimum pelatihan, sertifikasi, dan dinas jaga bagi pelaut di seluruh dunia.","Sebelum STCW: setiap negara punya standar berbeda → kualitas kompetensi pelaut tidak seragam."]},
+    {h:"2. Tujuan Konvensi STCW",items:["Menjamin keselamatan jiwa di laut (Safety of Life at Sea).","Melindungi lingkungan laut dari pencemaran.","Mengoperasikan kapal secara aman dan efisien.","Mendukung kelancaran perdagangan maritim internasional.","Menetapkan standar internasional minimum kompetensi pelaut.","Menyetarakan sistem pendidikan dan pelatihan pelaut.","Mengurangi kecelakaan akibat human element.","Memudahkan pengakuan sertifikat antar negara."]},
+    {h:"3. Tonggak Perkembangan (Wajib Hafal)",items:["<b>1978</b> — Konvensi STCW diadopsi 7 Juli 1978 oleh IMO di London; mulai berlaku 28 April 1984.","<b>1995</b> — Revisi besar. Diperkenalkan <ref>STCW Code</ref>, pemisahan Part A (wajib) & Part B (pedoman), pendekatan <ref>CBT</ref>, Quality Standards System, persyaratan Instruktur & Asesor, dan IMO White List.","<b>2010</b> — <ref>Manila Amendments</ref> (disahkan di Manila). Berlaku 1 Januari 2012, diterapkan penuh 1 Januari 2017."]},
+    {h:"4. Perubahan Penting Amandemen Manila 2010",items:["Pelatihan kepemimpinan dan kerja sama tim.","Pelatihan kesadaran keamanan (Security Awareness).","Kompetensi penggunaan <ref>ECDIS</ref>.","Sertifikasi Electro-Technical Officer (ETO) dan Electro-Technical Rating (ETR).","Refresher training untuk pelatihan keselamatan dasar.","Standar kesehatan pelaut yang diperbarui.","Ketentuan jam kerja dan jam istirahat.","Pencegahan penyalahgunaan alkohol dan narkoba."]},
+    {h:"5. Struktur Konvensi STCW",items:["Terdiri atas: Articles (Pasal) → Annex → Regulations (Peraturan).","Regulations dibagi menjadi 8 Bab (lihat tabel di bawah)."]},
+    {h:"6. Struktur Kode STCW",items:["Part A — Mandatory: Standar Kompetensi, Persyaratan Pelatihan, Sertifikasi, Standar Asesmen, Kualifikasi Instruktur & Asesor.","Part B — Guidance: pedoman pelaksanaan bagi Pemerintah, Lembaga Diklat, Instruktur, Asesor, dan Perusahaan Pelayaran."]},
+    {h:"7. Peran Instruktur menurut STCW Code Section A-I/6",items:["Memiliki kompetensi teknis sesuai bidang yang diajarkan.","Memahami metode pembelajaran dan teknik mengajar.","Mampu melakukan asesmen kompetensi secara objektif.","Memelihara kompetensi profesional melalui pengembangan berkelanjutan."]}
+  ],table:{head:["Bab","Materi"],rows:[["Chapter I","General Provisions"],["Chapter II","Master and Deck Department"],["Chapter III","Engine Department"],["Chapter IV","Radio Communication"],["Chapter V","Special Training Requirements"],["Chapter VI","Emergency, Occupational Safety, Medical Care and Survival Functions"],["Chapter VII","Alternative Certification"],["Chapter VIII","Watchkeeping"]]},callout:"<b>Kunci ingat:</b> 1978 = Lahir · 1995 = Kode & CBT · 2010 = Manila & Teknologi."},
+  andragogy:{intro:"Fokus: peserta menggunakan pengetahuan STCW untuk MEMECAHKAN MASALAH nyata di lembaga diklat & kapal.",scenarios:[
+    {t:"Skenario 1 — Sertifikat Ditolak di Port State Control",d:"Seorang pelaut Indonesia ditahan di pelabuhan asing. PSC menemukan sertifikatnya tidak diakui karena lembaga diklat penerbitnya tidak menerapkan Sistem Manajemen Mutu dan tidak terdaftar dalam IMO White List.",task:"<b>Tugas kelompok (25 menit):</b> (1) Identifikasi bagian STCW mana yang dilanggar. (2) Buat analisis akar masalah (fishbone). (3) Susun 5 langkah perbaikan agar lembaga masuk White List. (4) Presentasikan."},
+    {t:"Skenario 2 — Roadmap Amandemen Manila",d:"Lembaga Anda baru menyadari bahwa pelatihan ECDIS, ETO/ETR, dan refresher safety belum tersedia. Anggaran terbatas. Waktu implementasi 12 bulan.",task:"<b>Tugas kelompok:</b> Susun urutan prioritas implementasi 12 bulan dengan justifikasi risiko (matriks Impact × Urgency)."},
+    {t:"Skenario 3 — Human Error Masih Tinggi",d:"Statistik menunjukkan 70–80% kecelakaan kapal tetap disebabkan human error.",task:"<b>Diskusi terarah:</b> Di manakah letak 'kebocoran' antara standar STCW dan praktik? Apakah masalahnya di regulasi, lembaga diklat, instruktur, asesor, atau perusahaan?"}
+  ],exercises:["Pemetaan Regulasi → Kurikulum: ambil satu bab STCW, petakan kompetensinya ke mata kuliah yang Anda ampu.","Latihan cepat: dari 8 bab STCW, pilih 3 bab yang paling relevan dengan jabatan Anda.","Buat 'timeline interaktif' 1978–1995–2010 dan jelaskan dampaknya bagi pelaut Indonesia."],reflection:["Apa satu regulasi STCW yang paling sering disalahpahami di tempat kerja saya?","Jika saya hanya boleh mengajarkan satu hal tentang STCW, apa yang paling berdampak bagi keselamatan?"]},
+  heutagogy:{intro:"Fokus: peserta MENENTUKAN SENDIRI cara belajar dan MENCIPTAKAN solusi/karya baru.",projects:[
+    {t:"Proyek A — Audit Mandiri Lembaga Diklat",d:"Rancang sendiri checklist audit kepatuhan STCW untuk lembaga diklat Anda.",out:"<b>Luaran:</b> Dokumen checklist + laporan audit mini (5–8 halaman) + rekomendasi prioritas."},
+    {t:"Proyek B — Media Pembelajaran Timeline STCW",d:"Ciptakan media ajar (video/infografis/podcast) yang menjelaskan evolusi STCW 1978–1995–2010.",out:"<b>Luaran:</b> Karya media + narasi 300 kata + rubrik penilaian."},
+    {t:"Proyek C — Learning Contract Pribadi",d:"Susun kontrak belajar pribadi: target 30 hari, sumber belajar, bukti, cara mengukur diri.",out:"<b>Luaran:</b> Learning contract + log refleksi mingguan."}
+  ],reflection:["Bagaimana saya paling efektif belajar?","Apa yang akan saya ciptakan dari materi ini yang belum ada sebelumnya?","Bukti apa yang menunjukkan saya benar-benar sudah memahami STCW?"]}
+},
+
+{
+  id:"m2", num:2, icon:"🎯", pages:"Hal. 17–30",
+  title:"Persyaratan STCW untuk Competence-Based Training (CBT)",
+  en:"Understand STCW Convention and Code Requirement for Competence Based Training",
+  summary:"Konsep CBT, dasar hukum, struktur kompetensi, metode pembelajaran, dan asesmen berbasis bukti.",
+  objectives:["Menjelaskan konsep Competence-Based Training (CBT) dalam STCW.","Menjelaskan persyaratan STCW terkait pelatihan berbasis kompetensi.","Menjelaskan hubungan kompetensi–pelatihan–asesmen–sertifikasi.","Mengidentifikasi peran instruktur, supervisor, dan assessor dalam CBT.","Menerapkan prinsip CBT dalam perencanaan pelatihan maritim."],
+  pedagogy:{intro:"Fokus: peserta memahami CBT sebagai SISTEM — bukan sekadar metode mengajar.",blocks:[
+    {h:"1. Definisi CBT",items:["<ref>CBT</ref> = pendekatan pelatihan yang berfokus pada pencapaian kompetensi tertentu, bukan pada lamanya mengikuti pelatihan.","Peserta dinyatakan kompeten apabila mampu menunjukkan Pengetahuan, Keterampilan, dan Sikap Kerja sesuai standar STCW."]},
+    {h:"2. Tiga Aspek Kompetensi (K-S-A)",items:["<b>Knowledge</b> — memahami teori, prinsip, dan prosedur.","<b>Skill</b> — mampu melaksanakan tugas secara benar dan aman.","<b>Attitude</b> — menunjukkan perilaku profesional, disiplin, dan bertanggung jawab."]},
+    {h:"3. Empat Komponen Kompetensi dalam STCW",items:["Competence — kemampuan yang harus dimiliki.","Knowledge — pengetahuan yang mendukung kompetensi.","Understanding — pemahaman terhadap prinsip kerja.","Proficiency — kemampuan menerapkan pengetahuan secara efektif."]},
+    {h:"4. Struktur Tabel Kompetensi STCW",items:["Setiap kompetensi disusun dalam tabel dengan 4 elemen (lihat tabel).","Contoh: seorang <ref>OICNW</ref> harus mampu merencanakan dan melaksanakan navigasi sesuai standar kompetensi STCW."]},
+    {h:"5. Dasar Hukum CBT",items:["<b>STCW Convention</b>: mengharuskan setiap negara peserta memastikan pelaut memenuhi standar kompetensi minimum sebelum diberi sertifikat.","<b><ref>Section A-I/6</ref></b>: pelatihan oleh Instruktur berkualifikasi; asesmen oleh Assessor kompeten; metode sesuai; bukti kompetensi dapat dipertanggungjawabkan.","<b><ref>Section A-I/8</ref></b>: lembaga diklat wajib menerapkan Sistem Manajemen Mutu."]},
+    {h:"6. Karakteristik CBT",items:["Berorientasi pada hasil (learning outcomes).","Mengacu pada standar kompetensi STCW.","Mengintegrasikan teori dan praktik.","Menggunakan asesmen berbasis bukti (evidence-based assessment).","Mengakomodasi kecepatan belajar masing-masing peserta.","Menekankan kemampuan melakukan pekerjaan secara nyata."]},
+    {h:"7. Metode Pembelajaran dalam CBT",items:["Ceramah interaktif · Demonstrasi · Praktik langsung · Simulasi · Latihan di kapal · Studi kasus · Diskusi kelompok · Role play · Computer-Based Training · Simulator.","Prinsip: pemilihan metode harus disesuaikan dengan kompetensi yang akan dicapai."]},
+    {h:"8. Metode Asesmen",items:["Ujian tertulis · Ujian lisan · Demonstrasi praktik · Simulasi · Observasi langsung · Workplace assessment · Portofolio · Logbook pelatihan."]},
+    {h:"9. Alur CBT",items:["Menetapkan standar kompetensi → Menyusun tujuan pembelajaran → Mengembangkan kurikulum → Melaksanakan pelatihan → Melakukan asesmen → Memberikan umpan balik → Sertifikasi → Evaluasi & peningkatan."]},
+    {h:"10. Manfaat CBT",items:["Menjamin lulusan kompeten sesuai standar internasional.","Meningkatkan keselamatan pelayaran.","Mengurangi human error.","Mendukung pengakuan sertifikat internasional.","Memenuhi kebutuhan industri pelayaran.","Meningkatkan kualitas pendidikan & pelatihan maritim."]}
+  ],table:{head:["Elemen","Isi"],rows:[["Competence","Kompetensi yang harus dicapai."],["<ref>KUP</ref>","Materi yang harus dipelajari."],["Methods for Demonstrating Competence","Cara membuktikan kompetensi."],["Criteria for Evaluating Competence","Standar penilaian kompetensi."]]},callout:"<b>Inti CBT:</b> Bukan 'berapa lama belajar', tetapi 'apa yang sudah mampu dilakukan'."},
+  andragogy:{intro:"Fokus: peserta merancang & memecahkan masalah nyata dalam penerapan CBT.",scenarios:[
+    {t:"Skenario 1 — Merancang Sesi CBT",d:"Anda diminta merancang satu sesi pelatihan CBT untuk kompetensi Fire Prevention and Fire Fighting (STCW Table A-VI/1-2). Durasi 8 jam.",task:"<b>Tugas:</b> (1) Tuliskan rumusan Competence. (2) Susun KUP. (3) Pilih metode demonstrasi. (4) Tentukan kriteria evaluasi. (5) Rancang bukti asesmen."},
+    {t:"Skenario 2 — Peserta Gagal Asesmen",d:"Seorang taruna gagal 3 kali dalam asesmen praktik pemadaman kebakaran. Nilai tertulis 90, tetapi panik saat praktik.",task:"<b>Analisis akar masalah:</b> Apakah masalahnya di metode pembelajaran, kesiapan peserta, kompetensi asesor, atau alat/simulator? Susun rencana intervensi 2 minggu."},
+    {t:"Skenario 3 — Konversi Silabus",d:"Silabus lama berbasis waktu (16 jam teori, 8 jam praktik). Manajemen meminta konversi ke format berbasis kompetensi.",task:"<b>Tugas:</b> Ambil satu mata kuliah, konversikan menjadi tabel STCW (Competence – KUP – Methods – Criteria)."}
+  ],exercises:["Tulis satu KUP lengkap untuk kompetensi yang Anda ampu.","Rancang rubrik penilaian 'attitude' yang objektif dan dapat diamati.","Bandingkan dua metode asesmen untuk satu kompetensi, tentukan mana yang lebih valid & reliabel.","Simulasi: nilai rekaman video praktik taruna menggunakan rubrik yang Anda buat."],reflection:["Apakah asesmen yang saya lakukan benar-benar mengukur kompetensi, atau hanya mengukur ingatan?","Bagaimana saya memastikan asesmen saya objektif dan tidak bias?"]},
+  heutagogy:{intro:"Fokus: peserta menciptakan sendiri instrumen, rubrik, dan sistem asesmen.",projects:[
+    {t:"Proyek A — Bangun Rubrik Asesmen Sendiri",d:"Pilih satu kompetensi STCW. Rancang rubrik asesmen lengkap dengan level pencapaian (Novice–Developing–Competent–Proficient), indikator perilaku, dan bukti objektif.",out:"<b>Luaran:</b> Rubrik siap pakai + panduan penggunaan untuk asesor lain."},
+    {t:"Proyek B — Portofolio Belajar Pribadi",d:"Selama pelatihan, kumpulkan bukti belajar Anda. Susun menjadi portofolio kompetensi.",out:"<b>Luaran:</b> Portofolio digital + narasi reflektif 500 kata."},
+    {t:"Proyek C — Desain Skenario Simulator",d:"Ciptakan skenario simulator (bridge/engine) yang menguji kompetensi spesifik, lengkap dengan briefing, injection, dan debriefing guide.",out:"<b>Luaran:</b> Paket skenario + lembar observasi + kriteria lulus/tidak lulus."}
+  ],reflection:["Jika saya harus mengases kompetensi saya sendiri, bukti apa yang saya perlukan?","Apa yang membuat saya merasa 'benar-benar kompeten'?","Bagaimana saya akan terus memperbarui kompetensi saya setelah pelatihan ini?"]}
+},
+
+{
+  id:"m3", num:3, icon:"🧩", pages:"Hal. 31–48",
+  title:"Faktor-Faktor yang Memengaruhi Kegiatan Belajar-Mengajar",
+  en:"Identify the Factors which Influence the Teaching and Learning Process",
+  summary:"10 faktor penentu keberhasilan pembelajaran: dari instruktur hingga faktor eksternal.",
+  objectives:["Mengidentifikasi faktor-faktor yang memengaruhi proses belajar-mengajar.","Menjelaskan pengaruh setiap faktor terhadap pencapaian hasil belajar.","Menerapkan strategi untuk meningkatkan efektivitas pembelajaran dalam konteks CBT."],
+  pedagogy:{intro:"Fokus: peserta mengenali 10 faktor yang saling berkaitan dalam kegiatan belajar-mengajar.",blocks:[
+    {h:"Pengantar",items:["Kegiatan belajar-mengajar adalah proses interaksi antara instruktur, peserta, materi, metode, dan lingkungan belajar untuk mencapai kompetensi sesuai STCW.","Keberhasilan pembelajaran dipengaruhi berbagai faktor yang saling berkaitan."]},
+    {h:"1. Faktor Instruktur (Teacher Factors)",items:["Penguasaan materi · Kompetensi teknis · Kemampuan mengajar (pedagogik) · Komunikasi · Motivasi & antusiasme · Pengalaman mengajar · Kemampuan memberi umpan balik · Sikap profesional & integritas.","Instruktur adalah faktor UTAMA penentu keberhasilan.","<ref>Andragogy</ref> (Malcolm Knowles) — teori pembelajaran orang dewasa."]},
+    {h:"2. Faktor Peserta Diklat (Learner Factors)",items:["Motivasi belajar · Minat · Pengetahuan & pengalaman sebelumnya · Gaya belajar (Visual, Auditori, Membaca/Menulis, Kinestetik) · Tingkat kecerdasan · Kondisi fisik & kesehatan · Kondisi psikologis · Disiplin & sikap belajar."]},
+    {h:"3. Faktor Tujuan Pembelajaran",items:["Tujuan harus: Jelas · Spesifik · Terukur · Dapat dicapai · Relevan dengan kompetensi STCW."]},
+    {h:"4. Faktor Materi Pembelajaran",items:["Sesuai kurikulum · Mengacu STCW · Aktual · Sistematis · Relevan dengan industri · Seimbang teori & praktik."]},
+    {h:"5. Faktor Metode Pembelajaran",items:["Ceramah · Demonstrasi · Diskusi kelompok · Studi kasus · Simulasi · Role play · Praktik laboratorium · Simulator · On-board Training · Computer-Based Training."]},
+    {h:"6. Faktor Media & Sarana",items:["PowerPoint · Whiteboard · Video · Model kapal · Peralatan keselamatan · Bridge simulator · Engine simulator · E-learning."]},
+    {h:"7. Faktor Lingkungan Belajar",items:["Ruang kelas nyaman · pencahayaan cukup · ventilasi baik · kebersihan · kebisingan rendah · hubungan positif instruktur–peserta."]},
+    {h:"8. Faktor Penilaian (Assessment)",items:["Harus: Objektif · Valid · Reliabel · Transparan · Berbasis kompetensi.","Metode: tes tertulis, tes lisan, demonstrasi, simulasi, observasi, portofolio, logbook."]},
+    {h:"9. Faktor Manajemen Lembaga Diklat",items:["Kebijakan lembaga · Sistem manajemen mutu · Kompetensi instruktur · Jadwal pelatihan · Ketersediaan fasilitas · Dukungan administrasi · Pengembangan profesional."]},
+    {h:"10. Faktor Eksternal",items:["Kondisi keluarga · Budaya · Ekonomi · Perkembangan teknologi · Regulasi pemerintah · Kebutuhan industri pelayaran · Perubahan standar internasional."]},
+    {h:"Kaitan dengan STCW Code",items:["<b><ref>Section A-I/6</ref></b>: pembelajaran harus didukung instruktur kompeten, metode sesuai, fasilitas memadai, penilaian valid-objektif, lingkungan aman & mendukung.","<b><ref>Section A-I/8</ref></b>: lembaga diklat wajib menerapkan Sistem Manajemen Mutu."]}
+  ],table:{head:["Faktor","Pengaruh"],rows:[["Instruktur","Kompetensi, metode, komunikasi, motivasi."],["Peserta Diklat","Motivasi, pengalaman, kemampuan, sikap."],["Tujuan Pembelajaran","Menentukan arah dan hasil."],["Materi Pembelajaran","Relevansi, sistematika, kesesuaian."],["Metode Pembelajaran","Efektivitas penyampaian & pencapaian."],["Media dan Sarana","Membantu pemahaman & keterlibatan."],["Lingkungan Belajar","Suasana aman dan kondusif."],["Penilaian","Mengukur pencapaian & umpan balik."],["Manajemen Lembaga","Menjamin mutu & dukungan."],["Faktor Eksternal","Kesiapan & keberhasilan belajar."]]},callout:"<b>Prinsip kunci:</b> Faktor-faktor ini <u>tidak berdiri sendiri</u> — kelemahan pada satu faktor akan menular ke faktor lain."},
+  andragogy:{intro:"Fokus: peserta mendiagnosis masalah pembelajaran dan merancang intervensi.",scenarios:[
+    {t:"Skenario 1 — Kelas yang 'Mati'",d:"Sebuah kelas taruna tingkat II menunjukkan hasil belajar rendah: 60% tidak lulus asesmen praktik. Instruktur mengeluh peserta pasif, sering mengantuk, dan tidak mengerjakan tugas. Fasilitas lengkap, jadwal normal.",task:"<b>Diagnosis (20 menit):</b> Gunakan kerangka 10 faktor. (1) Faktor mana yang paling mungkin menjadi akar masalah? (2) Data apa yang perlu dikumpulkan? (3) Rancang intervensi 4 minggu. (4) Tentukan indikator keberhasilan."},
+    {t:"Skenario 2 — Analisis SWOT Pembelajaran",d:"Anda memimpin program diklat pelaut. Manajemen meminta laporan kesiapan program menghadapi audit mutu.",task:"<b>Tugas:</b> Lakukan SWOT terhadap 10 faktor pembelajaran. Identifikasi 3 kekuatan, 3 kelemahan, 3 peluang, 3 ancaman. Susun rencana aksi prioritas."},
+    {t:"Skenario 3 — Instruktur Berkualitas Rendah",d:"Seorang instruktur sangat ahli secara teknis (mantan Chief Engineer) tetapi peserta mengeluh tidak bisa memahami penjelasannya.",task:"<b>Tugas:</b> Rancang program pengembangan profesional untuk instruktur ini. Fokus pada 'pedagogik' dan 'komunikasi'. Buat rencana 3 bulan dengan mentoring dan observasi kelas."}
+  ],exercises:["Buat instrumen observasi kelas yang mencakup 10 faktor (minimal 3 indikator per faktor).","Lakukan observasi kelas rekan sejawat; berikan umpan balik konstruktif.","Identifikasi 3 faktor terlemah di lembaga Anda; hitung tingkat risikonya.","Rancang sesi pelatihan 2 jam untuk meningkatkan faktor 'motivasi peserta'."],reflection:["Faktor mana yang paling sering saya abaikan dalam mengajar?","Apa yang bisa saya perbaiki minggu ini tanpa anggaran tambahan?","Bagaimana saya mengukur dampak perbaikan faktor terhadap hasil belajar?"]},
+  heutagogy:{intro:"Fokus: peserta menciptakan alat ukur, sistem, dan komunitas belajar sendiri.",projects:[
+    {t:"Proyek A — Instrumen Evaluasi Diri Instruktur",d:"Rancang instrumen self-assessment bagi instruktur untuk mengevaluasi 10 faktor pembelajaran.",out:"<b>Luaran:</b> Instrumen lengkap + panduan interpretasi + template rencana perbaikan."},
+    {t:"Proyek B — Program Mentoring Instruktur Baru",d:"Ciptakan program mentoring 6 bulan: kurikulum, jadwal, peran mentor-mentee, cara mengukur keberhasilan.",out:"<b>Luaran:</b> Buku panduan program mentoring + logbook mentoring."},
+    {t:"Proyek C — Komunitas Praktik (Community of Practice)",d:"Bangun kerangka Community of Practice antar-instruktur maritim.",out:"<b>Luaran:</b> Proposal CoP + rencana 12 bulan + prototipe kanal komunikasi."},
+    {t:"Proyek D — Peta Risiko Pembelajaran",d:"Buat peta risiko (risk map) untuk 10 faktor pembelajaran, dengan skala probabilitas × dampak dan mitigasi.",out:"<b>Luaran:</b> Risk register + heat map visual."}
+  ],reflection:["Apa kebiasaan mengajar saya yang perlu saya hentikan, dan apa yang perlu saya mulai?","Jika saya mengajar dengan cara saya sendiri, bagaimana bentuknya?","Siapa yang bisa menjadi 'critical friend' saya untuk memberi umpan balik jujur?"]}
+},
+
+{
+  id:"m4", num:4, icon:"🏫", pages:"Hal. 49–61",
+  title:"Menciptakan Lingkungan Belajar yang Efektif",
+  en:"Establish an Effective Learning Environment",
+  summary:"Empat dimensi lingkungan belajar: fisik, psikologis, sosial, akademik — dan penerapannya dalam CBT.",
+  objectives:["Menjelaskan pengertian lingkungan belajar yang efektif.","Mengidentifikasi unsur-unsur lingkungan belajar efektif.","Menerapkan strategi untuk menciptakan suasana kondusif.","Meningkatkan partisipasi & motivasi peserta.","Mengembangkan lingkungan belajar yang mendukung CBT sesuai STCW."],
+  pedagogy:{intro:"Fokus: peserta memahami bahwa lingkungan belajar = kombinasi 4 dimensi yang saling menguatkan.",blocks:[
+    {h:"1. Definisi",items:["Lingkungan belajar efektif adalah kondisi fisik, psikologis, sosial, dan akademik yang mendukung peserta belajar secara aktif, aman, nyaman, dan termotivasi.","Dalam pelatihan maritim, lingkungan belajar harus mendukung knowledge, skill, dan attitude sesuai STCW."]},
+    {h:"2. Karakteristik Lingkungan Belajar Efektif",items:["Aman dan bebas bahaya · Nyaman, bersih, tertata · Menghargai peserta · Mendorong partisipasi aktif · Komunikasi terbuka · Disiplin konsisten · Berpusat pada peserta (learner-centered) · Mendukung kolaborasi."]},
+    {h:"3. Unsur A — Lingkungan Fisik",items:["Ruang kelas bersih dan rapi · Pencahayaan & ventilasi baik · Suhu nyaman · Tata letak tempat duduk sesuai metode · Peralatan berfungsi baik · Akses simulator, laboratorium, alat praktik."]},
+    {h:"4. Unsur B — Lingkungan Psikologis",items:["Suasana saling menghormati · Rasa aman untuk bertanya & berpendapat · Dukungan terhadap keberagaman · Penghargaan atas pencapaian · Hubungan positif instruktur–peserta."]},
+    {h:"5. Unsur C — Lingkungan Sosial",items:["Kerja sama antar peserta · Komunikasi efektif · Saling menghargai · Penyelesaian konflik konstruktif · Budaya belajar positif."]},
+    {h:"6. Unsur D — Lingkungan Akademik",items:["Tujuan pembelajaran jelas · Materi relevan · Metode bervariasi · Penilaian objektif · Umpan balik membangun."]},
+    {h:"7. Peran Instruktur",items:["Menjadi teladan profesional · Menjelaskan tujuan pembelajaran · Membangun komunikasi efektif · Mendorong keterlibatan semua peserta · Mengelola kelas · Memberi motivasi & dukungan · Menghargai perbedaan kemampuan · Memberi umpan balik tepat waktu & konstruktif."]},
+    {h:"8. Strategi Menciptakan Lingkungan Efektif",items:["Menetapkan aturan kelas sejak awal · Metode bervariasi · Melibatkan peserta dalam diskusi & praktik · Menghubungkan materi dengan pengalaman kerja nyata · Memberi kesempatan bertanya · Media menarik · Kelola waktu efektif · Beri penguatan (reinforcement) · Refleksi & evaluasi berkala."]},
+    {h:"9. Hambatan yang Umum",items:["Kurangnya motivasi peserta · Gangguan/kebisingan · Fasilitas tidak memadai · Komunikasi kurang efektif · Metode monoton · Jumlah peserta terlalu banyak · Perbedaan kemampuan tidak dikelola · Kurangnya kesempatan praktik."]},
+    {h:"10. Lingkungan Belajar dalam CBT",items:["Berorientasi pada pencapaian kompetensi · Memberi kesempatan praktik memadai · Menggunakan simulator & peralatan sesuai standar · Menyediakan umpan balik berkelanjutan · Mendorong pembelajaran aktif · Mendukung asesmen berbasis kompetensi."]},
+    {h:"11. Contoh Penerapan di Maritim",items:["<b>Di kelas:</b> diskusi interaktif prosedur keselamatan kapal.","<b>Di laboratorium/simulator:</b> latihan navigasi, operasi mesin, pemadaman kebakaran.","<b>Di kapal latih:</b> pembagian tugas sesuai kompetensi, briefing sebelum praktik, debriefing setelah latihan."]}
+  ],table:{head:["Unsur","Karakteristik"],rows:[["Fisik","Aman, bersih, nyaman, fasilitas memadai."],["Psikologis","Menghargai, mendukung, bebas dari rasa takut."],["Sosial","Kerja sama, komunikasi, saling menghormati."],["Akademik","Tujuan jelas, metode tepat, penilaian objektif."],["Instruktur","Profesional, komunikatif, memotivasi."],["Peserta","Aktif, disiplin, bertanggung jawab, kolaboratif."]]},callout:"<b>Rumus sederhana:</b> Lingkungan Efektif = (Fisik + Psikologis + Sosial + Akademik) × Konsistensi Instruktur."},
+  andragogy:{intro:"Fokus: peserta memecahkan masalah lingkungan belajar yang nyata.",scenarios:[
+    {t:"Skenario 1 — Taruna Tidak Mau Bertanya",d:"Di kelas Anda, tidak ada satu pun taruna yang berani bertanya meskipun materi sulit.",task:"<b>Tugas:</b> (1) Diagnosis: dimensi lingkungan mana yang bermasalah? (2) Rancang 5 intervensi konkret. (3) Bagaimana mengukur perubahan? (4) Praktikkan salah satu intervensi (role play)."},
+    {t:"Skenario 2 — Kelas Ramai & Bising",d:"Ruang kelas dekat area praktik. Kebisingan mengganggu. Peserta 45 orang, kursi fix. Metode diskusi kelompok sulit diterapkan.",task:"<b>Tugas:</b> Rancang solusi kreatif dengan sumber daya terbatas."},
+    {t:"Skenario 3 — Konflik Antar Peserta",d:"Dua kelompok taruna berselisih karena pembagian tugas praktik dianggap tidak adil.",task:"<b>Tugas:</b> Rancang proses mediasi. Susun skrip percakapan instruktur. Tentukan aturan kelas baru."}
+  ],exercises:["Rancang 'Kontrak Kelas' bersama peserta: 5 aturan yang disepakati bersama dan konsekuensinya.","Desain tata letak kelas untuk 3 metode berbeda (ceramah, diskusi kelompok, simulasi).","Buat checklist '10 menit pertama' yang efektif untuk membuka kelas.","Latihan: berikan umpan balik konstruktif kepada rekan (model SBI)."],reflection:["Apakah kelas saya terasa aman bagi peserta yang paling lemah?","Apa yang saya lakukan ketika peserta membuat kesalahan — menghukum atau mengajari?","Bagaimana saya memastikan setiap peserta merasa dihargai?"]},
+  heutagogy:{intro:"Fokus: peserta menciptakan desain lingkungan belajar sendiri.",projects:[
+    {t:"Proyek A — Desain Ruang Belajar Ideal",d:"Rancang ulang ruang belajar sesuai prinsip 4 dimensi.",out:"<b>Luaran:</b> Desain + justifikasi + perkiraan biaya + rencana implementasi bertahap."},
+    {t:"Proyek B — Learning Contract Peserta",d:"Buat format kontrak belajar yang ditandatangani peserta di awal pelatihan.",out:"<b>Luaran:</b> Template kontrak + panduan fasilitasi + contoh pengisian."},
+    {t:"Proyek C — Protokol Debriefing",d:"Ciptakan protokol debriefing standar untuk sesi simulator.",out:"<b>Luaran:</b> Buku panduan debriefing + kartu pertanyaan + form catatan."},
+    {t:"Proyek D — Sistem 'Buddy' & Peer Support",d:"Rancang sistem dukungan antar-peserta untuk memperkuat dimensi sosial & psikologis.",out:"<b>Luaran:</b> Kerangka program + panduan peran + metrik keberhasilan."}
+  ],reflection:["Lingkungan belajar seperti apa yang membuat SAYA paling cepat berkembang?","Apa satu kebiasaan kelas yang saya ciptakan sendiri dan terbukti berhasil?","Bagaimana saya tahu lingkungan belajar saya efektif?"]}
+},
+
+{
+  id:"m5", num:5, icon:"💡", pages:"Hal. 64–65",
+  title:"Konsep Kompetensi & Jenis-Jenisnya",
+  en:"Competence: Knowledge, Skill, Attitude",
+  summary:"Kompetensi sebagai perpaduan K-S-A dan pengelompokannya: teknis, perilaku, manajerial.",
+  objectives:["Menjelaskan definisi kompetensi sebagai perpaduan K-S-A.","Membedakan kompetensi teknis, perilaku, dan manajerial.","Mengaitkan konsep kompetensi dengan kebutuhan jabatan di kapal."],
+  pedagogy:{intro:"Fokus: peserta memahami kompetensi bukan sekadar 'bisa', tetapi 'bisa + paham + berperilaku tepat'.",blocks:[
+    {h:"1. Definisi Kompetensi",items:["Kompetensi adalah perpaduan antara Pengetahuan (Knowledge), Keterampilan (Skill), dan Sikap (Attitude) yang diaplikasikan untuk menyelesaikan tugas secara efektif dan unggul.","Kompetensi bersifat terukur, dapat dievaluasi, dan terus dikembangkan melalui pelatihan atau pengalaman kerja."]},
+    {h:"2. Jenis Kompetensi",items:["<b>Kompetensi Teknis (Hard Skills)</b> — kemampuan khusus/penguasaan ilmu yang berkaitan langsung dengan pekerjaan. Contoh: akuntansi, pemrograman, mengoperasikan mesin.","<b>Kompetensi Perilaku (Soft Skills)</b> — atribut kepribadian yang mendukung cara bekerja dan berinteraksi. Contoh: komunikasi, problem solving, teamwork.","<b>Kompetensi Manajerial (Managerial Skills)</b> — kemampuan memimpin, mengatur SDM, dan mengambil keputusan."]},
+    {h:"3. Hubungan K-S-A",items:["Knowledge tanpa Skill = hanya teori, tidak bisa bertindak.","Skill tanpa Attitude = berbahaya, berpotensi melanggar prosedur keselamatan.","Attitude tanpa Knowledge = niat baik tapi salah arah.","Kompetensi sejati = irisan ketiganya."]},
+    {h:"4. Relevansi di Dunia Maritim",items:["Seorang Master membutuhkan kompetensi teknis (navigasi, stabilitas), perilaku (kepemimpinan, komunikasi), dan manajerial (pengambilan keputusan, manajemen kru).","STCW mengukur kompetensi melalui bukti kinerja, bukan hanya jam belajar."]}
+  ],table:{head:["Jenis Kompetensi","Contoh di Kapal"],rows:[["Teknis (Hard Skills)","Navigasi, operasi mesin, pemadaman kebakaran, ECDIS."],["Perilaku (Soft Skills)","Komunikasi bridge team, kerja sama, resolusi konflik."],["Manajerial","Pengambilan keputusan, manajemen SDM, kepemimpinan."]]},callout:"<b>Pesan kunci:</b> 'Kompeten' bukan berarti 'tidak pernah salah' — tetapi 'mampu menunjukkan kinerja sesuai standar secara konsisten'."},
+  andragogy:{intro:"Fokus: peserta menilai dan mengembangkan kompetensi dirinya serta bawahannya.",scenarios:[
+    {t:"Skenario 1 — Penilaian Kompetensi Kru",d:"Anda sebagai Chief Officer harus menilai seorang Able Seaman yang secara teknis sangat cakap tetapi sering membangkang perintah dan tidak mau bekerja sama.",task:"<b>Tugas:</b> Buat profil kompetensi orang tersebut (K-S-A). Tentukan kekuatan, kesenjangan, dan rencana pengembangan 3 bulan."},
+    {t:"Skenario 2 — Promosi Jabatan",d:"Dua kandidat untuk posisi 2nd Engineer: (A) sangat teknis, kurang komunikatif; (B) komunikatif, teknis sedang.",task:"<b>Diskusi:</b> Siapa yang Anda pilih dan mengapa? Gunakan kerangka K-S-A. Bagaimana mengembangkan kandidat yang tidak dipilih?"}
+  ],exercises:["Buat self-assessment kompetensi Anda sendiri (K-S-A) untuk jabatan saat ini.","Identifikasi 3 kesenjangan kompetensi Anda; susun rencana pengembangan 6 bulan.","Latihan: dari 5 tugas rutin di kapal, identifikasi kompetensi yang paling kritis untuk keselamatan."],reflection:["Kompetensi mana yang paling lemah dalam diri saya — dan apakah saya jujur mengakuinya?","Bagaimana saya bisa mengembangkan 'attitude' pada orang lain?"]},
+  heutagogy:{intro:"Fokus: peserta merancang pengembangan kompetensi dirinya sendiri.",projects:[
+    {t:"Proyek A — Personal Development Plan",d:"Susun rencana pengembangan kompetensi pribadi 12 bulan.",out:"<b>Luaran:</b> PDP lengkap + timeline + sistem monitoring pribadi."},
+    {t:"Proyek B — Kompetensi Model untuk Jabatan",d:"Rancang model kompetensi lengkap untuk satu jabatan di kapal (Master, C/O, 2/E).",out:"<b>Luaran:</b> Kamus kompetensi jabatan + instrumen asesmen."},
+    {t:"Proyek C — Refleksi Kompetensi & Jurnal",d:"Selama 4 minggu, catat kejadian nyata di mana Anda menunjukkan (atau gagal menunjukkan) kompetensi tertentu.",out:"<b>Luaran:</b> Jurnal reflektif + analisis pola + pelajaran yang dipetik."}
+  ],reflection:["Apa definisi 'sukses' bagi saya dalam pekerjaan ini — dan kompetensi apa yang dibutuhkan?","Jika saya harus mengajarkan kompetensi inti saya kepada orang lain, apa yang pertama saya ajarkan?"]}
+},
+
+/* ===== MODUL 6 BARU: ISM CODE ===== */
+{
+  id:"m6", num:6, icon:"🛡️", pages:"ISM Code · SOLAS Bab IX",
+  title:"ISM Code dalam SOLAS Bab IX",
+  en:"International Safety Management Code — SOLAS Chapter IX",
+  summary:"Dasar hukum, rantai sistem keselamatan, peran Company-Nakhoda-DPA, serta perbedaan DOC & SMC.",
+  objectives:["Menjelaskan hubungan SOLAS Bab IX dan ISM Code.","Membedakan ISM Code, SMS, DPA, DOC, dan SMC.","Memahami penerapan keselamatan dan pencegahan pencemaran dalam operasi kapal."],
+  pedagogy:{intro:"Fokus: peserta memahami ISM Code sebagai kerangka MANAJEMEN keselamatan kapal — bukan sekadar sertifikat.",blocks:[
+    {h:"1. Apa itu ISM Code?",items:["<ref>ISM Code</ref> = International Safety Management Code.","Standar internasional untuk manajemen dan pengoperasian kapal secara aman.","Tujuannya juga mencakup pencegahan pencemaran lingkungan.","Menjadi wajib melalui amendemen SOLAS 1994."]},
+    {h:"2. Dasar Hukum: SOLAS Bab IX",items:["Nama bab: Management for the Safe Operation of Ships.","Diwajibkan melalui amendemen <ref>SOLAS</ref> 1994.","Bab IX dan kewajiban ISM mulai berlaku pada <b>1 Juli 1998</b>."]},
+    {h:"3. Rantai Sistem Keselamatan",items:["<ref>SOLAS</ref> Bab IX → dasar kewajiban internasional.","<ref>ISM Code</ref> → standar manajemen keselamatan.","<ref>SMS</ref> → sistem dan prosedur yang diterapkan perusahaan serta kapal.","Pelaksanaan → tindakan nyata, latihan, pelaporan, evaluasi, dan perbaikan."]},
+    {h:"4. Siapa Melakukan Apa?",items:["<b>Company</b>: memastikan SMS tersedia, diterapkan, dan didukung sumber daya.","<b>Nakhoda</b>: memimpin keselamatan kapal dan mengambil keputusan yang diperlukan.","<b><ref>DPA</ref></b>: penghubung kapal–darat serta pemantau aspek keselamatan dan pencemaran.","<b>Seluruh personel</b>: memahami tugas dan mengikuti prosedur yang berlaku."]},
+    {h:"5. DOC dan SMC: Jangan Tertukar",items:["<b><ref>DOC</ref></b> (Document of Compliance): sertifikat untuk <b>PERUSAHAAN</b>.","<b><ref>SMC</ref></b> (Safety Management Certificate): sertifikat untuk <b>KAPAL</b>.","Keduanya berkaitan dengan verifikasi terhadap penerapan ISM Code/SMS."]},
+    {h:"6. Contoh Penerapan di Kapal",items:["Risiko kerja diidentifikasi sebelum pekerjaan dimulai.","Prosedur kerja aman dan penggunaan PPE diterapkan.","Latihan keadaan darurat dilaksanakan sesuai rencana.","Insiden, near miss, dan ketidaksesuaian dilaporkan untuk pembelajaran."]},
+    {h:"7. ISM Code vs ISPS Code",items:["<b>ISM Code</b>: keselamatan operasi kapal dan pencegahan pencemaran.","<b><ref>ISPS Code</ref></b>: keamanan kapal dan fasilitas pelabuhan.","Keduanya berbeda tujuan, meskipun sama-sama terkait tata kelola kapal."]}
+  ],table:{head:["Istilah","Peruntukan"],rows:[["<ref>ISM Code</ref>","Standar manajemen keselamatan & pencegahan pencemaran."],["<ref>SMS</ref>","Sistem & prosedur yang diterapkan perusahaan dan kapal."],["<ref>DPA</ref>","Penghubung kapal–darat, pemantau keselamatan & pencemaran."],["<ref>DOC</ref>","Sertifikat untuk PERUSAHAAN."],["<ref>SMC</ref>","Sertifikat untuk KAPAL."],["<ref>ISPS Code</ref>","Keamanan kapal & fasilitas pelabuhan (berbeda dari ISM)."]]},callout:"<b>Ingat:</b> DOC = <b>D</b>arat/<b>D</b>ompany → Perusahaan. SMC = <b>S</b>hip → Kapal. Jangan tertukar!"},
+  andragogy:{intro:"Fokus: peserta memecahkan masalah penerapan ISM Code di kapal & perusahaan.",scenarios:[
+    {t:"Skenario 1 — Audit DOC & SMC",d:"Sebuah perusahaan pelayaran akan diaudit oleh Recognized Organization. Perusahaan memiliki 3 kapal. Dua kapal sudah punya SMC, satu belum. DOC perusahaan hampir kadaluarsa.",task:"<b>Tugas:</b> (1) Susun checklist persiapan audit. (2) Tentukan dokumen apa saja yang harus disiapkan untuk DOC dan SMC. (3) Siapa yang bertanggung jawab atas masing-masing dokumen? (4) Simulasikan sesi tanya-jawab auditor."},
+    {t:"Skenario 2 — Near Miss Tidak Dilaporkan",d:"Di sebuah kapal, terjadi near miss (hampir kecelakaan) saat mooring. Kru tidak melaporkan karena takut dianggap tidak kompeten. Sebulan kemudian terjadi kecelakaan serius dengan penyebab yang sama.",task:"<b>Analisis:</b> (1) Di mana kelemahan SMS? (2) Mengapa budaya pelaporan tidak terbangun? (3) Rancang sistem pelaporan near miss yang aman & anonim. (4) Bagaimana DPA seharusnya berperan?"},
+    {t:"Skenario 3 — Kesalahan Identifikasi DOC vs SMC",d:"Seorang surveyor PSC menemukan bahwa kapal memiliki SMC valid, tetapi DOC perusahaan sudah kadaluarsa. Kapten berargumen bahwa 'sertifikat kapal masih berlaku'.",task:"<b>Diskusi:</b> Apakah argumen kapten benar? Jelaskan hubungan DOC dan SMC menurut ISM Code. Apa konsekuensi hukum bagi kapal dan perusahaan?"}
+  ],exercises:["Buat diagram alur 'Rantai Sistem Keselamatan' dari SOLAS Bab IX hingga pelaksanaan di kapal.","Buat tabel perbandingan ISM Code vs ISPS Code (tujuan, cakupan, sertifikat).","Simulasi: berperan sebagai DPA, tangani laporan ketidaksesuaian dari 2 kapal berbeda.","Latihan: identifikasi 5 near miss di tempat kerja Anda dan tentukan tindakan pencegahannya."],reflection:["Apakah saya memahami perbedaan DOC dan SMC — dan mengapa perbedaan itu penting?","Bagaimana saya bisa berkontribusi pada budaya pelaporan yang sehat di kapal?","Apa yang akan saya lakukan jika menemukan ketidaksesuaian antara SMS dan praktik nyata?"]},
+  heutagogy:{intro:"Fokus: peserta menciptakan alat bantu, sistem, dan inovasi untuk penerapan ISM Code.",projects:[
+    {t:"Proyek A — Rancangan SMS Mini untuk Kapal Kecil",d:"Rancang kerangka SMS sederhana (5–10 prosedur inti) untuk kapal kecil (mis. kapal penyeberangan atau kapal latih).",out:"<b>Luaran:</b> Dokumen SMS mini + bagan organisasi + matriks tanggung jawab."},
+    {t:"Proyek B — Sistem Pelaporan Near Miss Digital",d:"Ciptakan prototipe sistem pelaporan near miss (formulir, alur, anonimitas, tindak lanjut) berbasis digital.",out:"<b>Luaran:</b> Prototipe sistem + SOP + panduan penggunaan."},
+    {t:"Proyek C — Simulasi Audit Internal DOC/SMC",d:"Rancang skenario simulasi audit internal lengkap dengan daftar pertanyaan, peran, dan rubrik penilaian.",out:"<b>Luaran:</b> Paket simulasi + lembar observasi + laporan audit contoh."},
+    {t:"Proyek D — Media Edukasi ISM Code",d:"Ciptakan media ajar (poster/video/infografis) yang menjelaskan ISM Code ke kru kapal baru.",out:"<b>Luaran:</b> Karya media + narasi + kuis penguatan."}
+  ],reflection:["Jika saya harus merancang SMS dari nol, apa prinsip utamanya?","Bagaimana saya bisa membuat pelaporan insiden terasa aman, bukan menghukum?","Apa peran saya (sebagai instruktur) dalam membangun budaya keselamatan?"]}
+}
+];
+
+/* ============================================================
+   DATABASE MATERI (LAMPIRAN)
+   ============================================================ */
+const DB_MATERI = [
+  {p:1,  m:"m1", t:"Halaman Judul — TOT IMO Model Course 6.09, Jakarta 2026, Capt. Pical Paulus, M.Mar.", tag:"Pengantar"},
+  {p:2,  m:"—",  t:"Curriculum Vitae Capt. Pical Paulus, M.Mar. — pendidikan MPI/MPB, pengalaman berlayar 1978–2016.", tag:"Pengajar"},
+  {p:3,  m:"—",  t:"Diklat khusus instructors-TOT BPPTL Jakarta & Singapore Polytechnic 2000/2012.", tag:"Pengajar"},
+  {p:4,  m:"—",  t:"Kompetensi yang diharapkan setelah mengikuti IMO Model Course 6.09.", tag:"Tujuan"},
+  {p:5,  m:"—",  t:"Pokok bahasan Day-1: 4 topik utama.", tag:"Silabus"},
+  {p:6,  m:"m1", t:"Tujuan pembelajaran Modul 1 — gambaran umum & perkembangan Konvensi dan Kode STCW.", tag:"Modul 1"},
+  {p:7,  m:"m1", t:"Definisi STCW & tujuan: keselamatan jiwa, perlindungan lingkungan, operasi aman-efisien.", tag:"Modul 1"},
+  {p:8,  m:"m1", t:"Tujuan Konvensi STCW (7 butir).", tag:"Modul 1"},
+  {p:9,  m:"m1", t:"STCW 1978 — diadopsi 7 Juli 1978, berlaku 28 April 1984.", tag:"Modul 1"},
+  {p:10, m:"m1", t:"STCW 1995 — revisi besar: STCW Code, Part A/B, CBT, Quality Standards, IMO White List.", tag:"Modul 1"},
+  {p:11, m:"m1", t:"Amandemen Manila 2010 — leadership, security awareness, ECDIS, ETO/ETR, refresher, dll.", tag:"Modul 1"},
+  {p:12, m:"m1", t:"Struktur Konvensi STCW: Articles, Annex, Regulations — 8 Bab.", tag:"Modul 1"},
+  {p:13, m:"m1", t:"Struktur Kode STCW: Part A (Mandatory) & Part B (Guidance).", tag:"Modul 1"},
+  {p:14, m:"m1", t:"Pentingnya STCW bagi dunia maritim & Peran Instruktur (STCW Code Section A-I/6).", tag:"Modul 1"},
+  {p:15, m:"m1", t:"Rangkuman Modul 1.", tag:"Modul 1"},
+  {p:16, m:"—",  t:"Penutup & kutipan Walt Disney.", tag:"Penutup"},
+  {p:17, m:"m2", t:"Tujuan pembelajaran Modul 2 — CBT dalam STCW.", tag:"Modul 2"},
+  {p:18, m:"m2", t:"Pengertian CBT, 3 aspek kompetensi (K-S-A).", tag:"Modul 2"},
+  {p:19, m:"m2", t:"Competency Based Training Delivery.", tag:"Modul 2"},
+  {p:20, m:"m2", t:"Dasar hukum CBT: Convention + Code Section A-I/6.", tag:"Modul 2"},
+  {p:21, m:"m2", t:"Konsep kompetensi dalam STCW — 4 komponen.", tag:"Modul 2"},
+  {p:22, m:"m2", t:"Struktur kompetensi dalam tabel STCW. Contoh OICNW.", tag:"Modul 2"},
+  {p:23, m:"m2", t:"Karakteristik CBT (6 butir).", tag:"Modul 2"},
+  {p:24, m:"m2", t:"Alur CBT.", tag:"Modul 2"},
+  {p:25, m:"m2", t:"Metode pembelajaran (10 metode).", tag:"Modul 2"},
+  {p:26, m:"m2", t:"Metode asesmen.", tag:"Modul 2"},
+  {p:27, m:"m2", t:"Kemampuan instruktur sesuai STCW Code Section A-I/6.", tag:"Modul 2"},
+  {p:28, m:"m2", t:"Manfaat CBT (6 butir).", tag:"Modul 2"},
+  {p:29, m:"m2", t:"Ringkasan CBT: Section A-I/6 & A-I/8.", tag:"Modul 2"},
+  {p:30, m:"—",  t:"Penutup Modul 2.", tag:"Penutup"},
+  {p:31, m:"m3", t:"Tujuan pembelajaran Modul 3.", tag:"Modul 3"},
+  {p:32, m:"m3", t:"Pengantar: interaksi instruktur, peserta, materi, metode, lingkungan.", tag:"Modul 3"},
+  {p:33, m:"m3", t:"(Halaman penomoran placeholder)", tag:"Modul 3"},
+  {p:34, m:"m3", t:"Faktor 1 — Instruktur (Teacher Factors): 8 sub-faktor.", tag:"Modul 3"},
+  {p:35, m:"m3", t:"Andragogy — Adult Learning Process.", tag:"Modul 3"},
+  {p:36, m:"m3", t:"Faktor 2 — Peserta Diklat (Learner Factors).", tag:"Modul 3"},
+  {p:37, m:"m3", t:"Perbedaan Pedagogi, Pedagogik, Pedagogis.", tag:"Modul 3"},
+  {p:38, m:"m3", t:"Faktor 3 — Tujuan Pembelajaran & Faktor 4 — Materi.", tag:"Modul 3"},
+  {p:39, m:"m3", t:"Faktor 5 — Metode Pembelajaran.", tag:"Modul 3"},
+  {p:40, m:"m3", t:"Faktor 6 — Media & Sarana.", tag:"Modul 3"},
+  {p:41, m:"m3", t:"Faktor 7 — Lingkungan Belajar.", tag:"Modul 3"},
+  {p:42, m:"m3", t:"Faktor 8 — Penilaian.", tag:"Modul 3"},
+  {p:43, m:"m3", t:"Faktor 9 — Manajemen Lembaga Diklat.", tag:"Modul 3"},
+  {p:44, m:"m3", t:"Faktor 10 — Faktor Eksternal.", tag:"Modul 3"},
+  {p:45, m:"m3", t:"Ringkasan tabel faktor.", tag:"Modul 3"},
+  {p:46, m:"m3", t:"Kaitan dengan STCW Code Section A-I/6 & A-I/8.", tag:"Modul 3"},
+  {p:47, m:"m3", t:"Ringkasan Modul 3.", tag:"Modul 3"},
+  {p:48, m:"—",  t:"Penutup Modul 3.", tag:"Penutup"},
+  {p:49, m:"m4", t:"Tujuan pembelajaran Modul 4.", tag:"Modul 4"},
+  {p:50, m:"m4", t:"Definisi lingkungan belajar efektif.", tag:"Modul 4"},
+  {p:51, m:"m4", t:"Karakteristik lingkungan belajar efektif (8 butir).", tag:"Modul 4"},
+  {p:52, m:"m4", t:"Unsur A — Lingkungan Fisik & Unsur B — Psikologis.", tag:"Modul 4"},
+  {p:53, m:"m4", t:"Unsur C — Sosial & Unsur D — Akademik.", tag:"Modul 4"},
+  {p:54, m:"m4", t:"Kemampuan instruktur (8 butir).", tag:"Modul 4"},
+  {p:55, m:"m4", t:"Strategi menciptakan lingkungan efektif (9 butir).", tag:"Modul 4"},
+  {p:56, m:"m4", t:"Hambatan efektivitas pembelajaran (8 butir).", tag:"Modul 4"},
+  {p:57, m:"m4", t:"Lingkungan belajar dalam CBT.", tag:"Modul 4"},
+  {p:58, m:"m4", t:"Contoh penerapan di kelas, lab/simulator, kapal latih.", tag:"Modul 4"},
+  {p:59, m:"m4", t:"Tabel lingkungan belajar efektif.", tag:"Modul 4"},
+  {p:60, m:"m4", t:"Ringkasan Modul 4.", tag:"Modul 4"},
+  {p:61, m:"—",  t:"Penutup Modul 4.", tag:"Penutup"},
+  {p:62, m:"—",  t:"Rekap pokok bahasan Day-1.", tag:"Rekap"},
+  {p:63, m:"—",  t:"Presented by Capt. Pical Paulus, M.Mar.", tag:"Rekap"},
+  {p:64, m:"m5", t:"Kompetensi: definisi & jenis.", tag:"Modul 5"},
+  {p:65, m:"m5", t:"Diagram Venn Kompetensi.", tag:"Modul 5"},
+  {p:1,  m:"m6", t:"ISM Code dalam SOLAS Bab IX — Tujuan Pembelajaran.", tag:"Modul 6 (ISM)"},
+  {p:2,  m:"m6", t:"Apa itu ISM Code?", tag:"Modul 6 (ISM)"},
+  {p:3,  m:"m6", t:"Dasar Hukum: SOLAS Bab IX.", tag:"Modul 6 (ISM)"},
+  {p:4,  m:"m6", t:"Rantai Sistem Keselamatan.", tag:"Modul 6 (ISM)"},
+  {p:5,  m:"m6", t:"Siapa Melakukan Apa? (Company, Nakhoda, DPA, Personel).", tag:"Modul 6 (ISM)"},
+  {p:6,  m:"m6", t:"DOC dan SMC: Jangan Tertukar.", tag:"Modul 6 (ISM)"},
+  {p:7,  m:"m6", t:"Contoh Penerapan di Kapal.", tag:"Modul 6 (ISM)"},
+  {p:8,  m:"m6", t:"ISM Code vs ISPS Code.", tag:"Modul 6 (ISM)"},
+  {p:9,  m:"m6", t:"Uji Pemahaman ISM Code.", tag:"Modul 6 (ISM)"},
+  {p:10, m:"m6", t:"Jawaban Kilat & Referensi ISM Code.", tag:"Modul 6 (ISM)"}
+];
+
+/* ============================================================
+   NAVBAR REFERENSI EKSTERNAL
+   ============================================================ */
+const EXT_REFS = [
+  {t:"IMO — Situs Resmi", u:"https://www.imo.org/", ic:"🌐", d:"International Maritime Organization"},
+  {t:"STCW Convention (IMO)", u:"https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Conv-Link.aspx", ic:"🎓", d:"STCW di situs resmi IMO"},
+  {t:"SOLAS Convention (IMO)", u:"https://www.imo.org/en/OurWork/Safety/Pages/SafetyOfLifeAtSea.aspx", ic:"🛟", d:"Safety of Life at Sea"},
+  {t:"MARPOL (IMO)", u:"https://www.imo.org/en/OurWork/Environment/Pages/Pollution-Prevention.aspx", ic:"🌊", d:"Pencegahan pencemaran laut"},
+  {t:"ISM Code (IMO)", u:"https://www.imo.org/en/OurWork/HumanElement/Pages/ISMCode.aspx", ic:"🛡️", d:"International Safety Management"},
+  {t:"ISPS Code (IMO)", u:"https://www.imo.org/en/OurWork/Security/Pages/SOLAS-XI-2%20ISPS%20Code.aspx", ic:"🔒", d:"Ship & Port Facility Security"},
+  {t:"Cari 'SOLAS Bab IX' di Google", u:"https://www.google.com/search?q=SOLAS+Chapter+IX+Management+Safe+Operation+Ships", ic:"🔍", d:"Google Search"},
+  {t:"Cari 'STCW Manila Amendments' di Google", u:"https://www.google.com/search?q=STCW+Manila+Amendments+2010", ic:"🔍", d:"Google Search"},
+  {t:"Cari 'MARPOL Annex' di Google", u:"https://www.google.com/search?q=MARPOL+Annex+I+II+III+IV+V+VI", ic:"🔍", d:"Google Search"},
+  {t:"STCW di Wikipedia", u:"https://en.wikipedia.org/wiki/STCW_Convention", ic:"📚", d:"Wikipedia"},
+  {t:"SOLAS di Wikipedia", u:"https://en.wikipedia.org/wiki/SOLAS_Convention", ic:"📚", d:"Wikipedia"},
+  {t:"MARPOL di Wikipedia", u:"https://en.wikipedia.org/wiki/MARPOL_73/78", ic:"📚", d:"Wikipedia"},
+  {t:"ISM Code di Wikipedia", u:"https://en.wikipedia.org/wiki/International_Safety_Management_Code", ic:"📚", d:"Wikipedia"},
+  {t:"Andragogy (Malcolm Knowles)", u:"https://www.google.com/search?q=Andragogy+Malcolm+Knowles+adult+learning", ic:"🔍", d:"Google Search"},
+  {t:"Heutagogy — Self-Determined Learning", u:"https://www.google.com/search?q=Heutagogy+self-determined+learning", ic:"🔍", d:"Google Search"}
+];
+
+/* ============================================================
+   KUIS
+   ============================================================ */
+const QUIZ = [
+  {q:"Konvensi STCW pertama kali diadopsi oleh IMO pada tahun…", o:["1974","1978","1984","1995"], a:1, e:"STCW diadopsi 7 Juli 1978 di London dan mulai berlaku 28 April 1984."},
+  {q:"Amandemen Manila yang memperbarui standar STCW disahkan pada tahun…", o:["1995","2005","2010","2015"], a:2, e:"Amandemen Manila 2010 berlaku 1 Januari 2012 dan diterapkan penuh 1 Januari 2017."},
+  {q:"Bagian STCW Code yang bersifat WAJIB (mandatory) adalah…", o:["Part A","Part B","Part C","Annex"], a:0, e:"Part A = Mandatory; Part B = Guidance."},
+  {q:"Section STCW Code yang mengatur Training and Assessment adalah…", o:["A-I/4","A-I/6","A-I/8","A-II/1"], a:1, e:"Section A-I/6 = Training & Assessment; A-I/8 = Quality Standards."},
+  {q:"CBT dalam konteks STCW adalah singkatan dari…", o:["Computer Based Training","Competence Based Training","Certificate Based Training","Competency Basic Test"], a:1, e:"CBT = Competence Based Training."},
+  {q:"Tiga aspek utama kompetensi dalam CBT adalah…", o:["Knowledge, Skill, Attitude","Theory, Practice, Exam","Speed, Accuracy, Safety","Plan, Do, Check"], a:0, e:"Kompetensi = K-S-A."},
+  {q:"Bagian STCW Code yang berisi pedoman pelaksanaan bagi Pemerintah, Lembaga Diklat, dan Instruktur adalah…", o:["Part A","Part B","Chapter I","Articles"], a:1, e:"Part B — Guidance."},
+  {q:"Amandemen Manila 2010 diterapkan sepenuhnya sejak…", o:["1 Januari 2012","1 Januari 2014","1 Januari 2017","1 Juli 2010"], a:2, e:"Berlaku 1 Januari 2012, diterapkan penuh 1 Januari 2017."},
+  {q:"Bab STCW yang mengatur Watchkeeping adalah…", o:["Chapter V","Chapter VI","Chapter VII","Chapter VIII"], a:3, e:"Chapter VIII — Watchkeeping."},
+  {q:"Sistem Standar Mutu lembaga diklat diatur dalam STCW Code…", o:["Section A-I/6","Section A-I/8","Section A-II/1","Section A-VI/1"], a:1, e:"Section A-I/8 (Quality Standards)."},
+  {q:"Faktor yang dianggap PALING menentukan keberhasilan pembelajaran adalah…", o:["Media pembelajaran","Fasilitas","Instruktur","Jadwal"], a:2, e:"Instruktur adalah faktor utama."},
+  {q:"Teori pembelajaran orang dewasa disebut…", o:["Pedagogy","Andragogy","Heutagogy","Didaktik"], a:1, e:"Andragogy (Malcolm Knowles)."},
+  {q:"Lingkungan belajar efektif terdiri atas… unsur.", o:["2","3","4","5"], a:2, e:"Fisik, Psikologis, Sosial, Akademik."},
+  {q:"Metode asesmen yang menekankan bukti nyata kinerja disebut…", o:["Norm-referenced","Evidence-based assessment","Multiple choice","Oral examination"], a:1, e:"Evidence-based assessment."},
+  {q:"IMO White List bagi negara yang memenuhi persyaratan STCW diperkenalkan pada revisi tahun…", o:["1978","1995","2010","2017"], a:1, e:"Revisi 1995."},
+  {q:"Kompetensi manajerial contohnya adalah…", o:["Mengoperasikan mesin","Mengelas plat","Memimpin & mengambil keputusan","Mengetik laporan"], a:2, e:"Manajerial = memimpin & mengambil keputusan."},
+  {q:"SOLAS Bab IX mengatur tentang…", o:["Navigasi","Radio Communication","Management for the Safe Operation of Ships","Watchkeeping"], a:2, e:"SOLAS Bab IX = Management for the Safe Operation of Ships (dasar ISM Code)."},
+  {q:"ISM Code mulai berlaku secara wajib pada…", o:["1 Juli 1994","1 Juli 1998","1 Januari 2002","1 Januari 2010"], a:1, e:"Bab IX SOLAS dan kewajiban ISM berlaku 1 Juli 1998."},
+  {q:"Sertifikat yang diterbitkan untuk PERUSAHAAN menurut ISM Code adalah…", o:["DOC","SMC","STCW","ISM Certificate"], a:0, e:"DOC — Document of Compliance (untuk perusahaan)."},
+  {q:"Sertifikat yang diterbitkan untuk KAPAL menurut ISM Code adalah…", o:["DOC","SMC","PSC","IMO Cert"], a:1, e:"SMC — Safety Management Certificate (untuk kapal)."},
+  {q:"Peran penghubung antara kapal dan manajemen darat dalam ISM Code disebut…", o:["Master","Chief Officer","DPA","Superintendent"], a:2, e:"DPA — Designated Person Ashore."},
+  {q:"Perbedaan utama ISM Code dan ISPS Code adalah…", o:["ISM = keamanan, ISPS = keselamatan","ISM = keselamatan operasi & pencegahan pencemaran, ISPS = keamanan kapal & fasilitas pelabuhan","Keduanya sama","ISM = internasional, ISPS = nasional"], a:1, e:"ISM = safety & pollution prevention; ISPS = security."},
+  {q:"Mengapa near miss perlu dilaporkan? (ISM Code)", o:["Agar ada sanksi","Untuk pembelajaran & pencegahan kecelakaan serius","Untuk statistik perusahaan","Agar ada promosi"], a:1, e:"Near miss dilaporkan untuk pembelajaran (lessons learned) dan pencegahan kecelakaan serius."}
+];
+
+/* ============================================================
+   APLIKASI PENGEMBANGAN INSTRUKTUR
+   ============================================================ */
+const APLIKASI = {
+  intro:"Kerangka penerapan tiga pendekatan (Pedagogi → Andragogi → Heutagogi) untuk pengembangan instruktur pelayaran berbasis TOT 6.09, dapat diterapkan pada lembaga pembelajaran & vokasi pelayaran.",
+  matrix:{
+    head:["Pendekatan","Di Kelas Instruktur (TOT)","Di Laboratorium & Simulator","Di Kapal Latih / Industri"],
+    rows:[
+      ["PEDAGOGI\nApa yang harus diajarkan?",
+       "Penguasaan dasar STCW, ISM Code, SOLAS, MARPOL, K-S-A, prosedur keselamatan. Ceramah interaktif, demonstrasi, latihan terstruktur.",
+       "Briefing sebelum praktik, panduan tertulis, checklist prosedur. Instruktur mendemonstrasikan, peserta meniru dan mengulang.",
+       "Refresher terstruktur, pelatihan wajib sebelum naik jabatan, sertifikasi berjenjang."],
+      ["ANDRAGOGI\nBagaimana memecahkan masalah?",
+       "Studi kasus kecelakaan kapal, audit DOC/SMC, simulasi pengambilan keputusan, role play bridge team, problem-based learning.",
+       "Peserta diberi skenario nyata (kebakaran, man overboard, near miss) dan harus memutuskan sendiri di bawah supervisi.",
+       "Investigasi insiden, lessons learned, mentoring junior, analisis akar masalah (RCA) di atas kapal."],
+      ["HEUTAGOGI\nBagaimana menentukan cara belajar & menciptakan solusi?",
+       "Peserta menyusun learning contract, portofolio, proyek riset mandiri, peer teaching, membangun komunitas praktik antar-instruktur.",
+       "Peserta merancang sendiri prosedur/skenario latihan, menjadi asesor sebaya, membuat media pembelajaran untuk junior.",
+       "CPD mandiri, menjadi mentor, menciptakan inovasi keselamatan, kontribusi ke komunitas maritim."]
+    ]
+  },
+  roadmap:[
+    {t:"Tahun 1 — Fondasi Pedagogi", d:"Standarisasi modul ajar berbasis STCW Table (Competence–KUP–Methods–Criteria). Kalibrasi instruktur. Bangun bank soal & rubrik asesmen."},
+    {t:"Tahun 2 — Penguatan Andragogi", d:"Integrasi studi kasus & simulator ke semua mata pelajaran praktik. Pelatihan instruktur dalam fasilitasi diskusi & debriefing. Bangun bank skenario."},
+    {t:"Tahun 3 — Pengembangan Heutagogi", d:"Terapkan learning contract, portofolio, peer assessment, dan proyek capstone. Bangun komunitas praktik instruktur–industri."},
+    {t:"Tahun 4+ — Ekosistem Belajar Berkelanjutan", d:"Sistem digital pelacakan kompetensi seumur karier. Kemitraan dengan perusahaan pelayaran. Riset terapan pendidikan maritim."}
+  ],
+  praktik:[
+    {t:"Instruktur sebagai Fasilitator, bukan Sekadar Pengajar", d:"Instruktur memandu peserta menemukan solusi, bukan menuangkan informasi. Teknik bertanya (Socratic questioning), diskusi terarah, dan debriefing menjadi keterampilan inti."},
+    {t:"Rotasi Peran (Job Rotation) dalam Pelatihan", d:"Setiap peserta memegang minimal 3 peran berbeda selama pelatihan. Setiap peran memiliki kompetensi K-S-A yang jelas dan rubrik asesmen."},
+    {t:"Sistem Buddy & Mentoring Berjenjang", d:"Instruktur senior menjadi mentor instruktur junior; instruktur menjadi mentor peserta. Membangun dimensi sosial & psikologis lingkungan belajar."},
+    {t:"Refleksi Terstruktur (Debriefing Terjadwal)", d:"Setiap akhir sesi: 15 menit debriefing dengan protokol What–So What–Now What. Dicatat dalam logbook digital instruktur."},
+    {t:"Proyek Capstone Instruktur", d:"Di akhir program TOT, instruktur merancang solusi nyata untuk masalah pembelajaran di lembaganya (mis. efisiensi sesi, SOP asesmen, sistem portofolio) dan mempresentasikannya."}
+  ],
+  actionChecklist:[
+    "Susun silabus setiap mata pelajaran dalam format tabel STCW (Competence–KUP–Methods–Criteria).",
+    "Bangun rubrik asesmen untuk minimal 10 kompetensi kunci.",
+    "Latih semua instruktur dalam teknik fasilitasi andragogi (diskusi, studi kasus, debriefing).",
+    "Integrasikan minimal 1 sesi simulator/simulasi untuk setiap kompetensi praktik.",
+    "Terapkan learning contract di awal setiap program pelatihan.",
+    "Bangun sistem portofolio digital untuk setiap instruktur & peserta.",
+    "Bentuk Community of Practice instruktur maritim (pertemuan bulanan).",
+    "Lakukan audit mutu internal berbasis Section A-I/8 setiap 6 bulan.",
+    "Kembangkan kemitraan dengan minimal 5 perusahaan pelayaran untuk workplace assessment.",
+    "Evaluasi & revisi kurikulum setiap tahun berdasarkan umpan balik industri.",
+    "Sosialisasikan ISM Code (SOLAS Bab IX) secara khusus untuk seluruh instruktur teknik.",
+    "Bangun sistem pelaporan near miss internal sebagai bagian dari budaya keselamatan."
+  ]
+};
+
+/* ============================================================
+   STATE & STORAGE
+   ============================================================ */
+const LS_KEY = "tot609_instructor_webapp_v1";
+let STATE = {view:"dashboard", moduleId:null, tab:"pedagogi", dbFilter:"", glosFilter:"", quizAnswers:{}, quizSubmitted:false};
+
+function loadStore(){
+  try{const r=localStorage.getItem(LS_KEY);return r?JSON.parse(r):{done:{},notes:{},quiz:{},checklist:{}};}
+  catch(e){return {done:{},notes:{},quiz:{},checklist:{}};}
+}
+function saveStore(s){try{localStorage.setItem(LS_KEY,JSON.stringify(s));}catch(e){}}
+let STORE = loadStore();
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function renderNav(){
+  const nav = document.getElementById("nav");
+  let html = "";
+
+  html += `<div class="nav-lbl">UTAMA</div>`;
+  html += navBtn("dashboard","🏠","Dashboard");
+  html += navBtn("dbmateri","🗄️","Database Materi");
+  html += navBtn("glosarium","📖","Glosarium & Referensi");
+
+  html += `<div class="nav-lbl">MODUL PEMBELAJARAN</div>`;
+  MODULES.forEach(m=>{
+    const active = STATE.view==="mod:"+m.id ? " active" : "";
+    const done = STORE.done[m.id] ? " done" : "";
+    html += `<button class="${active}${done}" onclick="go('mod:${m.id}')" title="${m.title}">
+      <span class="ic">${m.icon}</span><span>Modul ${m.num} — ${m.title.substring(0,28)}${m.title.length>28?'…':''}</span>
+      ${STORE.done[m.id]?'<span class="arrow" style="color:#34d399">✓</span>':''}
+    </button>`;
+  });
+
+  html += `<div class="nav-lbl">ASESMEN</div>`;
+  html += navBtn("kuis","📝","Kuis Kompetensi");
+  html += navBtn("aplikasi","🎓","Pengembangan Instruktur");
+
+  html += `<div class="nav-lbl">REFERENSI EKSTERNAL 🌐</div>`;
+  EXT_REFS.forEach(r=>{
+    html += `<a href="${r.u}" target="_blank" rel="noopener" title="${r.d}">
+      <span class="ic">${r.ic}</span><span>${r.t}</span>
+      <span class="arrow">↗</span>
+    </a>`;
+  });
+
+  nav.innerHTML = html;
+
+  const total = MODULES.length;
+  const doneCount = MODULES.filter(m=>STORE.done[m.id]).length;
+  const pct = Math.round(doneCount/total*100);
+  document.getElementById("progBar").style.width = pct+"%";
+  document.getElementById("progTxt").textContent = pct+"%";
+}
+function navBtn(id, ic, label){
+  const active = STATE.view===id ? " active" : "";
+  return `<button class="${active}" onclick="go('${id}')"><span class="ic">${ic}</span><span>${label}</span></button>`;
+}
+
+function go(view){
+  STATE.view = view;
+  if(view.startsWith("mod:")){ STATE.moduleId = view.split(":")[1]; STATE.tab = "pedagogi"; }
+  render();
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("on");
+  window.scrollTo({top:0,behavior:"instant"});
+  renderNav();
+}
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("on");
+}
+
+/* ============================================================
+   POPUP
+   ============================================================ */
+function openPopup(key){
+  const r = REFS[key];
+  if(!r){ return; }
+  document.getElementById("popTag").textContent = "REFERENSI · " + key;
+  document.getElementById("popTitle").textContent = r.title;
+  document.getElementById("popSub").textContent = r.full;
+  document.getElementById("popDesc").textContent = r.desc;
+  document.getElementById("popLinks").innerHTML = r.links.map(l=>
+    `<a href="${l.u}" target="_blank" rel="noopener" class="${l.cls}">
+      <span class="lic">${l.ic}</span>
+      <span>${l.t}</span>
+      <span class="lmeta">${l.meta} ↗</span>
+    </a>`
+  ).join("");
+  const related = (r.tags||[]).map(t=>{
+    const hasRef = REFS[t];
+    return hasRef ? `<button onclick="openPopup('${t}')">${t}</button>` : `<button onclick="openPopup('${t}')">${t}</button>`;
+  }).join("");
+  document.getElementById("popRelated").innerHTML = related ?
+    `<b>Istilah Terkait</b><div class="tags">${related}</div>` : "";
+  document.getElementById("popupBg").classList.add("on");
+  document.body.style.overflow = "hidden";
+}
+function closePopup(){
+  document.getElementById("popupBg").classList.remove("on");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ closePopup(); document.getElementById("sidebar").classList.remove("open"); document.getElementById("overlay").classList.remove("on"); }
+});
+
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+function setCrumb(txt){ document.getElementById("crumb").innerHTML = txt; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// Convert <ref>KEY</ref> to clickable span
+function processRefs(html){
+  return html.replace(/<ref>([^<]+)<\/ref>/g, (m,k)=>{
+    const key = k.trim();
+    const safe = key.replace(/'/g,"\\'");
+    return `<span class="ref" onclick="openPopup('${safe}')" title="Klik untuk referensi: ${key}">${key}</span>`;
+  });
+}
+
+function blockHTML(b){
+  return `<div class="blk">
+    <h4><span class="dot"></span>${b.h}</h4>
+    <ul>${b.items.map(i=>`<li>${processRefs(i)}</li>`).join("")}</ul>
+  </div>`;
+}
+function tableHTML(t){
+  if(!t) return "";
+  return `<table class="tbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+  <tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${processRefs(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+/* ============================================================
+   VIEW: DASHBOARD
+   ============================================================ */
+function viewDashboard(){
+  setCrumb("Dashboard");
+  const doneCount = MODULES.filter(m=>STORE.done[m.id]).length;
+  const pct = Math.round(doneCount/MODULES.length*100);
+  const quizDone = Object.keys(STORE.quiz||{}).length;
+  const notesCount = Object.values(STORE.notes||{}).filter(v=>v&&v.trim()).length;
+
+  return `
+  <div class="hero">
+    <span class="tag">DAY-1 · 12 OKTOBER 2026 · JAKARTA</span>
+    <h1>TOT IMO Model Course 6.09<br>${COURSE.appTitle}</h1>
+    <p><b style="color:#fff">${COURSE.subtitle}</b>. WebApp pembelajaran berbasis tiga pendekatan — <b style="color:#fcd34d">Pedagogi</b>, <b style="color:#fcd34d">Andragogi</b>, dan <b style="color:#fcd34d">Heutagogi</b> — untuk pengembangan instruktur pelayaran & lembaga vokasi maritim.</p>
+    <div class="pres-box">
+      <b>PRESENTED BY</b>
+      <span>${COURSE.presenter}</span>
+    </div>
+    <div class="meta">
+      <span><b>6</b>Modul Pembelajaran</span>
+      <span><b>75+</b>Halaman Materi</span>
+      <span><b>23</b>Soal Kuis</span>
+      <span><b>${Object.keys(REFS).length}</b>Referensi Glosarium</span>
+      <span><b>${pct}%</b>Progres Anda</span>
+    </div>
+  </div>
+
+  <div class="grid g4 mb">
+    <div class="stat"><div class="n">${doneCount}/${MODULES.length}</div><div class="l">Modul Selesai</div></div>
+    <div class="stat"><div class="n">${quizDone}/23</div><div class="l">Kuis Dijawab</div></div>
+    <div class="stat"><div class="n">${notesCount}</div><div class="l">Catatan Aktif</div></div>
+    <div class="stat"><div class="n">${pct}%</div><div class="l">Total Progres</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📖 Akses Cepat Referensi Eksternal</h2>
+    <p class="sub">Klik untuk membuka di tab baru — cari langsung di sumber resmi IMO, Wikipedia, atau Google.</p>
+    <div class="grid g3" style="margin-top:14px">
+      ${EXT_REFS.slice(0,6).map(r=>`
+        <a href="${r.u}" target="_blank" rel="noopener" style="text-decoration:none">
+          <div class="gloss-card">
+            <div class="gt">${r.ic} ${r.t}</div>
+            <div class="gf">${r.d}</div>
+            <div class="gaction">Buka di tab baru ↗</div>
+          </div>
+        </a>
+      `).join("")}
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn primary" onclick="go('glosarium')">📖 Buka Glosarium Lengkap & Semua Referensi →</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cara Menggunakan WebApp Ini</h2>
+    <p class="sub">Setiap modul dibagi menjadi tiga lapisan pendekatan. Gunakan berurutan — jangan melompat.</p>
+    <div class="grid g3" style="margin-top:16px">
+      <div style="border-left:4px solid var(--blue);padding:12px 14px;background:var(--blue-l);border-radius:9px">
+        <b style="color:#1e40af;font-size:12px;letter-spacing:1px">1 · PEDAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#1e3a8a"><b>Apa yang harus saya ajarkan agar peserta memahami?</b><br>Konten inti, konsep kunci, dan struktur materi.</p>
+      </div>
+      <div style="border-left:4px solid var(--teal);padding:12px 14px;background:var(--teal-l);border-radius:9px">
+        <b style="color:#115e59;font-size:12px;letter-spacing:1px">2 · ANDRAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#134e4a"><b>Bagaimana peserta menggunakan pengetahuan untuk memecahkan masalah?</b><br>Skenario nyata, studi kasus, latihan terapan.</p>
+      </div>
+      <div style="border-left:4px solid var(--purple);padding:12px 14px;background:var(--purple-l);border-radius:9px">
+        <b style="color:#5b21b6;font-size:12px;letter-spacing:1px">3 · HEUTAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#4c1d95"><b>Bagaimana peserta menentukan cara belajar & menciptakan solusi?</b><br>Proyek mandiri, karya cipta, refleksi pribadi.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:16px">
+      💡 <b>Tips:</b> Setiap istilah bergaris bawah hijau seperti <ref>STCW</ref>, <ref>SOLAS</ref>, <ref>MARPOL</ref>, <ref>ISM Code</ref>, <ref>DOC</ref>, <ref>SMC</ref>, <ref>DPA</ref> dapat <b>diklik</b> untuk membuka popup referensi lengkap dengan tautan googling.
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;color:var(--navy);margin:22px 0 12px">📚 Modul Pembelajaran (6 Modul)</h3>
+  <div class="grid g2">
+    ${MODULES.map(m=>`
+      <div class="mod-card" onclick="go('mod:${m.id}')">
+        <div class="flex" style="justify-content:space-between;align-items:center">
+          <span class="mnum">MODUL ${m.num} · ${m.pages}</span>
+          <span style="font-size:20px">${m.icon}</span>
+        </div>
+        <div class="mt">${m.title}</div>
+        <div class="mp">${m.summary}</div>
+        <div class="mfoot">
+          <span class="chk ${STORE.done[m.id]?'on':''}">${STORE.done[m.id]?'✓':''}</span>
+          <span>${STORE.done[m.id]?'Selesai':'Belum selesai'}</span>
+          <span style="margin-left:auto;color:var(--teal);font-weight:600">Buka →</span>
+        </div>
+      </div>
+    `).join("")}
+  </div>
+
+  <div class="card" style="margin-top:22px">
+    <h2>🎓 Pengembangan Instruktur Berbasis TOT 6.09</h2>
+    <p class="sub">Kerangka penerapan tiga pendekatan untuk pengembangan instruktur pelayaran & lembaga vokasi maritim.</p>
+    <div class="flex" style="margin-top:14px">
+      <button class="btn primary" onclick="go('aplikasi')">Lihat Matriks Penerapan →</button>
+      <button class="btn" onclick="go('kuis')">Mulai Kuis →</button>
+      <button class="btn" onclick="go('glosarium')">Buka Glosarium →</button>
+    </div>
+  </div>
+
+  <div class="quote">
+    "Cara untuk memulai adalah berhenti berbicara dan mulai melakukan."
+    <span>— Walt Disney · dikutip Capt. Pical Paulus, M.Mar.</span>
+  </div>
+  `;
+}
+
+/* ============================================================
+   VIEW: MODULE
+   ============================================================ */
+function viewModule(id){
+  const m = MODULES.find(x=>x.id===id);
+  if(!m) return "<div class='card'><h2>Modul tidak ditemukan</h2></div>";
+  setCrumb(`<b>Modul ${m.num}</b> · ${m.title}`);
+
+  const tabs = [
+    {k:"pedagogi", lab:"Pedagogi", ic:"📘"},
+    {k:"andragogi", lab:"Andragogi", ic:"🔧"},
+    {k:"heutagogi", lab:"Heutagogi", ic:"🚀"}
+  ];
+
+  return `
+  <div class="card">
+    <div class="flex" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.6px;color:var(--teal)">MODUL ${m.num} · ${m.pages}</div>
+        <h2 style="margin-top:6px">${m.icon} ${m.title}</h2>
+        <p class="sub" style="font-style:italic">${m.en}</p>
+      </div>
+      <button class="btn ${STORE.done[m.id]?'teal':''}" onclick="toggleDone('${m.id}')">
+        ${STORE.done[m.id]?'✓ Selesai':'Tandai Selesai'}
+      </button>
+    </div>
+
+    <div style="margin-top:16px;background:#f6fafd;border-radius:11px;padding:14px 17px;border:1px solid var(--line)">
+      <b style="font-size:12px;letter-spacing:1px;color:var(--navy)">TUJUAN PEMBELAJARAN</b>
+      <ul style="margin-top:8px;padding-left:20px;font-size:13.5px;color:#2c4562">
+        ${m.objectives.map(o=>`<li style="margin-bottom:4px">${o}</li>`).join("")}
+      </ul>
+    </div>
+  </div>
+
+  <div class="tabs">
+    ${tabs.map(t=>`<button class="tab ${STATE.tab===t.k?'active':''}" data-t="${t.k}" onclick="setTab('${t.k}')">
+      <span>${t.ic}</span> ${t.lab}
+    </button>`).join("")}
+  </div>
+
+  <div class="panel ${STATE.tab==='pedagogi'?'active':''}" id="panel-pedagogi">${panelPedagogi(m)}</div>
+  <div class="panel ${STATE.tab==='andragogi'?'active':''}" id="panel-andragogi">${panelAndragogi(m)}</div>
+  <div class="panel ${STATE.tab==='heutagogi'?'active':''}" id="panel-heutagogi">${panelHeutagogi(m)}</div>
+
+  <div class="card">
+    <h3 style="margin-top:0">📝 Catatan Refleksi Saya</h3>
+    <p class="sub" style="margin-bottom:10px">Catatan tersimpan otomatis di browser Anda.</p>
+    <textarea class="notes" id="note-${m.id}" placeholder="Tulis refleksi, pertanyaan, atau rencana aksi Anda setelah mempelajari modul ini…"
+      oninput="saveNote('${m.id}', this.value)">${(STORE.notes[m.id]||"").replace(/</g,'&lt;')}</textarea>
+    <div class="save-hint" id="hint-${m.id}"></div>
+    <div class="flex" style="margin-top:12px">
+      <button class="btn" onclick="go('${m.num<MODULES.length?'mod:'+MODULES[m.num].id:'kuis'}')">
+        ${m.num<MODULES.length?'Modul Berikutnya →':'Lanjut ke Kuis →'}
+      </button>
+      <button class="btn" onclick="go('dashboard')">← Dashboard</button>
+    </div>
+  </div>
+  `;
+}
+
+function panelPedagogi(m){
+  const p = m.pedagogy;
+  return `
+  <div class="card">
+    <div class="qbox blue">
+      <div class="qlab">📘 Pertanyaan Pemandu · Pedagogi</div>
+      <p>"Apa yang harus saya ajarkan agar peserta memahami?"</p>
+    </div>
+    <p style="font-size:13.5px;color:#33506e;margin-bottom:16px">${p.intro}</p>
+    ${p.blocks.map(blockHTML).join("")}
+    ${p.table?`<div class="card" style="box-shadow:none;border:1px dashed var(--line);padding:16px;margin-top:6px">
+      <h4 style="margin-top:0">📊 Tabel Referensi</h4>${tableHTML(p.table)}</div>`:""}
+    ${p.callout?`<div class="callout">${p.callout}</div>`:""}
+  </div>`;
+}
+function panelAndragogi(m){
+  const a = m.andragogy;
+  return `
+  <div class="card">
+    <div class="qbox teal">
+      <div class="qlab">🔧 Pertanyaan Pemandu · Andragogi</div>
+      <p>"Bagaimana peserta menggunakan pengetahuan untuk memecahkan masalah?"</p>
+    </div>
+    <p style="font-size:13.5px;color:#33506e;margin-bottom:16px">${a.intro}</p>
+
+    <h3 style="margin-top:6px">🧪 Skenario & Studi Kasus</h3>
+    ${a.scenarios.map(s=>`
+      <div class="scen">
+        <div class="st">${s.t}</div>
+        <p>${processRefs(s.d)}</p>
+        <div class="task">${processRefs(s.task)}</div>
+      </div>
+    `).join("")}
+
+    <h3>✏️ Latihan Terapan</h3>
+    <div class="blk">
+      <h4><span class="dot"></span>Latihan untuk Peserta</h4>
+      <ul>${a.exercises.map(e=>`<li>${processRefs(e)}</li>`).join("")}</ul>
+    </div>
+
+    <h3>💭 Pertanyaan Refleksi</h3>
+    <div class="blk" style="background:#f0fdfa;border-color:#99f6e4">
+      <h4><span class="dot" style="background:var(--teal)"></span>Renungkan</h4>
+      <ul>${a.reflection.map(r=>`<li>${processRefs(r)}</li>`).join("")}</ul>
+    </div>
+  </div>`;
+}
+function panelHeutagogi(m){
+  const h = m.heutagogy;
+  return `
+  <div class="card">
+    <div class="qbox purple">
+      <div class="qlab">🚀 Pertanyaan Pemandu · Heutagogi</div>
+      <p>"Bagaimana peserta menentukan cara belajar dan menciptakan solusi sendiri?"</p>
+    </div>
+    <p style="font-size:13.5px;color:#33506e;margin-bottom:16px">${h.intro}</p>
+
+    <h3 style="margin-top:6px">🛠️ Proyek Mandiri</h3>
+    ${h.projects.map(p=>`
+      <div class="proj">
+        <div class="pt">📌 ${p.t}</div>
+        <p>${processRefs(p.d)}</p>
+        <div class="out">${processRefs(p.out)}</div>
+      </div>
+    `).join("")}
+
+    <h3>💭 Refleksi Metakognitif</h3>
+    <div class="blk" style="background:#faf5ff;border-color:#ddd6fe">
+      <h4><span class="dot" style="background:var(--purple)"></span>Pertanyaan untuk Diri Sendiri</h4>
+      <ul>${h.reflection.map(r=>`<li>${processRefs(r)}</li>`).join("")}</ul>
+    </div>
+
+    <div class="callout" style="background:#ede9fe;border-color:var(--purple);color:#4c1d95">
+      <b>Heutagogi = double-loop learning.</b> Peserta tidak hanya belajar <i>apa</i> yang harus dilakukan, tetapi juga belajar <i>bagaimana cara belajar</i> dan <i>mengapa</i> hal itu penting bagi dirinya.
+    </div>
+  </div>`;
+}
+function setTab(t){
+  STATE.tab = t;
+  document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("active", el.dataset.t===t));
+  document.querySelectorAll(".panel").forEach(el=>el.classList.toggle("active", el.id==="panel-"+t));
+}
+function toggleDone(id){
+  STORE.done[id] = !STORE.done[id];
+  saveStore(STORE);
+  renderNav(); render();
+}
+function saveNote(id, val){
+  STORE.notes[id] = val;
+  saveStore(STORE);
+  const hint = document.getElementById("hint-"+id);
+  if(hint){
+    hint.textContent = "✓ Tersimpan " + new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+    clearTimeout(hint._t);
+    hint._t = setTimeout(()=>{hint.textContent="";}, 1800);
+  }
+}
+
+/* ============================================================
+   VIEW: DATABASE MATERI
+   ============================================================ */
+function viewDB(){
+  setCrumb("Database Materi");
+  return `
+  <div class="card">
+    <h2>🗄️ Database Lampiran Pembelajaran</h2>
+    <p class="sub">Seluruh materi Day-1 TOT IMO Model Course 6.09 + modul ISM Code, dipetakan ke modul pembelajaran.</p>
+    <input class="search" id="dbSearch" placeholder="🔍 Cari materi, topik, atau nomor halaman…" value="${esc(STATE.dbFilter)}" oninput="STATE.dbFilter=this.value; renderDBTable();">
+    <div class="flex" style="margin-bottom:10px;gap:8px">
+      <span class="pill p">Modul 1–5</span><span class="pill i">Modul 6 (ISM)</span><span class="pill g">Pengajar</span>
+      <span style="font-size:12px;color:var(--muted);margin-left:auto"><b id="dbCount">${DB_MATERI.length}</b> entri</span>
+    </div>
+    <div style="max-height:620px;overflow:auto;border:1px solid var(--line);border-radius:10px">
+      <table class="tbl">
+        <thead><tr><th style="width:60px">Hal.</th><th style="width:90px">Modul</th><th>Materi</th><th style="width:130px">Kategori</th></tr></thead>
+        <tbody id="dbBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">🗺️ Peta Modul → Halaman</h3>
+    ${tableHTML({
+      head:["Modul","Judul","Halaman"],
+      rows: MODULES.map(m=>[`Modul ${m.num}`, m.title, m.pages])
+    })}
+  </div>
+  `;
+}
+function renderDBTable(){
+  const q = (STATE.dbFilter||"").toLowerCase();
+  const rows = DB_MATERI.filter(r=>
+    !q || r.t.toLowerCase().includes(q) || r.tag.toLowerCase().includes(q) || String(r.p).includes(q)
+  );
+  const body = document.getElementById("dbBody");
+  if(!body) return;
+  body.innerHTML = rows.map(r=>{
+    const mod = MODULES.find(m=>m.id===r.m);
+    const link = mod ? `<a href="javascript:go('mod:${mod.id}')" style="color:var(--teal);font-weight:700;text-decoration:none">M${mod.num}</a>` : `<span style="color:#94a3b8">—</span>`;
+    let cls = "p";
+    if(r.tag.startsWith("Modul 6")) cls="i";
+    else if(r.tag==="Pengajar"||r.tag==="Pengantar"||r.tag==="Penutup") cls="g";
+    return `<tr>
+      <td style="font-weight:700;color:var(--navy)">${r.p}</td>
+      <td>${link}</td>
+      <td>${r.t}</td>
+      <td><span class="pill ${cls}">${r.tag}</span></td>
+    </tr>`;
+  }).join("");
+  const c = document.getElementById("dbCount"); if(c) c.textContent = rows.length;
+}
+
+/* ============================================================
+   VIEW: GLOSARIUM & REFERENSI
+   ============================================================ */
+function viewGlosarium(){
+  setCrumb("Glosarium & Referensi Eksternal");
+  const keys = Object.keys(REFS);
+  const q = (STATE.glosFilter||"").toLowerCase();
+  const filtered = keys.filter(k=>!q || k.toLowerCase().includes(q) || REFS[k].title.toLowerCase().includes(q) || REFS[k].desc.toLowerCase().includes(q));
+
+  return `
+  <div class="hero" style="background:linear-gradient(135deg,#7c3aed 0%,#0a2342 70%)">
+    <span class="tag">GLOSARIUM & REFERENSI EKSTERNAL</span>
+    <h1>📖 Kamus Istilah & Pencarian Cepat</h1>
+    <p>Klik istilah untuk melihat definisi lengkap beserta tautan ke sumber resmi <b style="color:#fcd34d">IMO</b>, <b style="color:#fcd34d">Wikipedia</b>, dan <b style="color:#fcd34d">Google Search</b>. Semua istilah dapat di-googling langsung dari sini.</p>
+  </div>
+
+  <div class="card">
+    <h2>📚 Kamus Istilah (${keys.length} entri)</h2>
+    <p class="sub">Klik kartu untuk membuka popup referensi lengkap dengan tautan eksternal.</p>
+    <input class="search" placeholder="🔍 Cari istilah: STCW, ISM Code, MARPOL, DOC, SMC, DPA…" value="${esc(STATE.glosFilter)}" oninput="STATE.glosFilter=this.value; renderGlosList();">
+    <div class="grid g3" id="glosGrid">
+      ${filtered.map(k=>{
+        const r = REFS[k];
+        return `<div class="gloss-card" onclick="openPopup('${k.replace(/'/g,"\\'")}')">
+          <div class="gt">${k}</div>
+          <div class="gf">${r.full}</div>
+          <div class="gd">${r.desc.substring(0,120)}…</div>
+          <div class="gaction">Buka popup & referensi ↗</div>
+        </div>`;
+      }).join("")}
+    </div>
+    ${filtered.length===0?`<p style="text-align:center;padding:30px;color:var(--muted)">Tidak ada istilah yang cocok.</p>`:""}
+  </div>
+
+  <div class="card">
+    <h2>🌐 Referensi Eksternal Lengkap</h2>
+    <p class="sub">Semua tautan dapat diklik → buka tab baru. Cocok untuk pendalaman materi & riset instruktur.</p>
+    <div class="grid g2" style="margin-top:14px">
+      ${EXT_REFS.map(r=>`
+        <a href="${r.u}" target="_blank" rel="noopener" style="text-decoration:none">
+          <div class="gloss-card" style="border-left-color:var(--blue)">
+            <div class="gt">${r.ic} ${r.t}</div>
+            <div class="gf">${r.d}</div>
+            <div class="gaction" style="color:var(--blue)">Buka tab baru ↗</div>
+          </div>
+        </a>
+      `).join("")}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔍 Pencarian Cepat Google</h2>
+    <p class="sub">Klik tombol untuk mencari langsung di Google.</p>
+    <div class="grid g3" style="margin-top:14px">
+      <a href="https://www.google.com/search?q=STCW+Convention+IMO+1978" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 STCW Convention</a>
+      <a href="https://www.google.com/search?q=SOLAS+Chapter+IX+ISM+Code" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 SOLAS Bab IX + ISM Code</a>
+      <a href="https://www.google.com/search?q=MARPOL+Annex+I-VI+IMO" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 MARPOL Annex</a>
+      <a href="https://www.google.com/search?q=STCW+Manila+Amendments+2010" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 Manila Amendments 2010</a>
+      <a href="https://www.google.com/search?q=DOC+vs+SMC+ISM+Code" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 DOC vs SMC</a>
+      <a href="https://www.google.com/search?q=Designated+Person+Ashore+DPA" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 DPA — Designated Person Ashore</a>
+      <a href="https://www.google.com/search?q=Competence+Based+Training+STCW" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 Competence Based Training</a>
+      <a href="https://www.google.com/search?q=Andragogy+Malcolm+Knowles" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 Andragogy (Knowles)</a>
+      <a href="https://www.google.com/search?q=Heutagogy+self-determined+learning" target="_blank" rel="noopener" class="btn gold" style="text-decoration:none;justify-content:center">🔍 Heutagogy</a>
+    </div>
+  </div>
+  `;
+}
+function renderGlosList(){
+  const q = (STATE.glosFilter||"").toLowerCase();
+  const keys = Object.keys(REFS);
+  const filtered = keys.filter(k=>!q || k.toLowerCase().includes(q) || REFS[k].title.toLowerCase().includes(q) || REFS[k].desc.toLowerCase().includes(q));
+  const grid = document.getElementById("glosGrid");
+  if(!grid) return;
+  grid.innerHTML = filtered.map(k=>{
+    const r = REFS[k];
+    return `<div class="gloss-card" onclick="openPopup('${k.replace(/'/g,"\\'")}')">
+      <div class="gt">${k}</div>
+      <div class="gf">${r.full}</div>
+      <div class="gd">${r.desc.substring(0,120)}…</div>
+      <div class="gaction">Buka popup & referensi ↗</div>
+    </div>`;
+  }).join("");
+  if(filtered.length===0) grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">Tidak ada istilah yang cocok.</p>`;
+}
+
+/* ============================================================
+   VIEW: KUIS
+   ============================================================ */
+function viewQuiz(){
+  setCrumb("Kuis Kompetensi");
+  const total = QUIZ.length;
+  const answered = Object.keys(STATE.quizAnswers).length;
+  const sub = STATE.quizSubmitted;
+
+  let scoreHTML = "";
+  if(sub){
+    let correct = 0;
+    QUIZ.forEach((q,i)=>{ if(STATE.quizAnswers[i]===q.a) correct++; });
+    const pct = Math.round(correct/total*100);
+    let msg = pct>=80 ? "🎉 Luar biasa! Anda siap menjadi instruktur CBT." :
+              pct>=60 ? "👍 Baik. Pelajari kembali modul yang masih lemah." :
+                        "📚 Perlu pengulangan. Baca ulang modul 1–6 secara berurutan.";
+    scoreHTML = `<div class="score-box">
+      <div class="big">${pct}%</div>
+      <p>${correct} benar dari ${total} soal</p>
+      <p style="margin-top:10px;font-size:15px;color:#fff;font-weight:600">${msg}</p>
+    </div>`;
+  }
+
+  return `
+  <div class="card">
+    <div class="flex" style="justify-content:space-between;align-items:center">
+      <div>
+        <h2>📝 Kuis Kompetensi TOT 6.09 + ISM Code</h2>
+        <p class="sub">${total} soal pilihan ganda · ${answered}/${total} dijawab</p>
+      </div>
+      ${sub?`<button class="btn gold" onclick="resetQuiz()">↺ Ulangi Kuis</button>`:""}
+    </div>
+  </div>
+
+  ${scoreHTML}
+
+  ${QUIZ.map((q,i)=>{
+    const chosen = STATE.quizAnswers[i];
+    return `<div class="qq">
+      <div class="qn">SOAL ${i+1} DARI ${total}</div>
+      <div class="qt">${processRefs(q.q)}</div>
+      ${q.o.map((o,j)=>{
+        let cls = "opt";
+        if(sub){
+          cls += " lock";
+          if(j===q.a) cls += " correct";
+          else if(chosen===j) cls += " wrong";
+        }
+        return `<label class="${cls}">
+          <input type="radio" name="q${i}" ${chosen===j?"checked":""} ${sub?"disabled":""} onchange="answerQuiz(${i},${j})">
+          <span>${String.fromCharCode(65+j)}. ${o}</span>
+        </label>`;
+      }).join("")}
+      ${sub?`<div style="margin-top:8px;font-size:12.8px;background:#f0f9ff;border-left:3px solid var(--blue);padding:9px 12px;border-radius:6px;color:#1e3a8a">
+        <b>Penjelasan:</b> ${q.e}</div>`:""}
+    </div>`;
+  }).join("")}
+
+  ${!sub?`<div class="card" style="text-align:center">
+    <button class="btn primary" style="padding:13px 34px;font-size:14px" onclick="submitQuiz()">
+      ✓ Selesai & Lihat Hasil
+    </button>
+    <p class="sub" style="margin-top:10px">Pastikan semua soal telah dijawab.</p>
+  </div>`:""}
+  `;
+}
+function answerQuiz(i,j){
+  STATE.quizAnswers[i] = j;
+  STORE.quiz = STATE.quizAnswers;
+  saveStore(STORE);
+  const el = document.querySelector(".card .sub");
+  const answered = Object.keys(STATE.quizAnswers).length;
+  if(el) el.textContent = `${QUIZ.length} soal pilihan ganda · ${answered}/${QUIZ.length} dijawab`;
+}
+function submitQuiz(){
+  const answered = Object.keys(STATE.quizAnswers).length;
+  if(answered < QUIZ.length){
+    if(!confirm(`Baru ${answered} dari ${QUIZ.length} soal dijawab. Lanjut menilai?`)) return;
+  }
+  STATE.quizSubmitted = true;
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function resetQuiz(){
+  STATE.quizAnswers = {}; STATE.quizSubmitted = false;
+  STORE.quiz = {}; saveStore(STORE);
+  render();
+}
+
+/* ============================================================
+   VIEW: APLIKASI PENGEMBANGAN INSTRUKTUR
+   ============================================================ */
+function viewAplikasi(){
+  setCrumb("Pengembangan Instruktur");
+  const mx = APLIKASI.matrix;
+  return `
+  <div class="hero" style="background:linear-gradient(135deg,#0d9488 0%,#0a2342 70%)">
+    <span class="tag">APLIKASI UNTUK LEMBAGA PEMBELAJARAN & VOKASI PELAYARAN</span>
+    <h1>🎓 Pengembangan Instruktur Berbasis TOT 6.09</h1>
+    <p>${APLIKASI.intro}</p>
+    <div class="pres-box">
+      <b>DISUSUN OLEH</b>
+      <span>${COURSE.presenter}</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Matriks Penerapan: Pedagogi → Andragogi → Heutagogi</h2>
+    <p class="sub" style="margin-bottom:14px">Bagaimana setiap pendekatan diterapkan pada tiga konteks: kelas instruktur, laboratorium/simulator, dan kapal latih/industri.</p>
+    <div class="matrix">
+      <div class="mh">Pendekatan</div>
+      <div class="mh">📚 Kelas Instruktur (TOT)</div>
+      <div class="mh">🔬 Lab & Simulator</div>
+      <div class="mh">🚢 Kapal Latih / Industri</div>
+      ${mx.rows.map(r=>`
+        <div class="mrh">${r[0].replace("\n","<br><span style='font-weight:400;font-size:11px;color:#5b7290'>")}${r[0].includes("\n")?"</span>":""}</div>
+        <div>${processRefs(r[1])}</div>
+        <div>${processRefs(r[2])}</div>
+        <div>${processRefs(r[3])}</div>
+      `).join("")}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ Roadmap Implementasi 4 Tahun</h2>
+    <div class="grid g2">
+      ${APLIKASI.roadmap.map((r,i)=>`
+        <div style="border:1px solid var(--line);border-radius:11px;padding:16px;border-top:4px solid ${i===0?'var(--blue)':i===1?'var(--teal)':i===2?'var(--purple)':'var(--gold)'}">
+          <b style="color:var(--navy);font-size:14px">${r.t}</b>
+          <p style="font-size:13px;color:#33506e;margin-top:8px">${r.d}</p>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏫 Praktik Baik untuk Lembaga Vokasi Pelayaran</h2>
+    <p class="sub" style="margin-bottom:14px">Diambil dari prinsip CBT, ISM Code, dan tiga pendekatan pembelajaran.</p>
+    ${APLIKASI.praktik.map(u=>`
+      <div class="blk">
+        <h4><span class="dot" style="background:var(--purple)"></span>${u.t}</h4>
+        <p style="font-size:13.5px;color:#33506e">${u.d}</p>
+      </div>
+    `).join("")}
+  </div>
+
+  <div class="card">
+    <h2>✅ Rencana Aksi Instruktur (Checklist)</h2>
+    <p class="sub" style="margin-bottom:12px">Centang untuk menandai kemajuan implementasi Anda.</p>
+    <div id="actionList">
+      ${APLIKASI.actionChecklist.map((a,i)=>`
+        <label class="cl-item ${STORE.checklist&&STORE.checklist[i]?'done':''}" id="cl-${i}">
+          <input type="checkbox" ${STORE.checklist&&STORE.checklist[i]?"checked":""} onchange="toggleCheck(${i})">
+          <span>${a}</span>
+        </label>
+      `).join("")}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Inti Penerapan</h2>
+    <div class="grid g3">
+      <div style="background:var(--blue-l);border-radius:11px;padding:16px;border-left:4px solid var(--blue)">
+        <b style="color:#1e40af;font-size:12px;letter-spacing:1px">PEDAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#1e3a8a">Instruktur menguasai <b>dasar K-S-A</b> STCW, ISM Code, SOLAS melalui pengajaran terstruktur, demonstrasi, dan latihan terbimbing.</p>
+      </div>
+      <div style="background:var(--teal-l);border-radius:11px;padding:16px;border-left:4px solid var(--teal)">
+        <b style="color:#115e59;font-size:12px;letter-spacing:1px">ANDRAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#134e4a">Instruktur <b>memecahkan masalah nyata</b> di simulator, kapal latih, dan industri melalui studi kasus, audit DOC/SMC, & debriefing terstruktur.</p>
+      </div>
+      <div style="background:var(--purple-l);border-radius:11px;padding:16px;border-left:4px solid var(--purple)">
+        <b style="color:#5b21b6;font-size:12px;letter-spacing:1px">HEUTAGOGI</b>
+        <p style="font-size:13px;margin-top:6px;color:#4c1d95">Instruktur <b>menentukan cara belajar sendiri</b> dan menciptakan solusi, karya, serta inovasi di bidang pendidikan maritim.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:18px">
+      <b>Hasil akhir yang diharapkan:</b> Instruktur pelayaran yang bukan hanya <i>competent</i> menurut standar STCW & ISM Code, tetapi juga <i>adaptive</i>, <i>reflective</i>, dan <i>self-directed</i> — siap menghadapi perubahan teknologi dan regulasi maritim global.
+    </div>
+  </div>
+  `;
+}
+function toggleCheck(i){
+  if(!STORE.checklist) STORE.checklist = {};
+  STORE.checklist[i] = !STORE.checklist[i];
+  saveStore(STORE);
+  const el = document.getElementById("cl-"+i);
+  if(el) el.classList.toggle("done", STORE.checklist[i]);
+}
+
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render(){
+  const app = document.getElementById("app");
+  let html = "";
+  if(STATE.view === "dashboard") html = viewDashboard();
+  else if(STATE.view === "dbmateri") html = viewDB();
+  else if(STATE.view === "glosarium") html = viewGlosarium();
+  else if(STATE.view === "kuis") html = viewQuiz();
+  else if(STATE.view === "aplikasi") html = viewAplikasi();
+  else if(STATE.view.startsWith("mod:")) html = viewModule(STATE.moduleId);
+  else html = viewDashboard();
+  app.innerHTML = html;
+  if(STATE.view === "dbmateri") renderDBTable();
+}
+
+function resetAll(){
+  if(!confirm("Reset semua progres, catatan, dan jawaban kuis? Tindakan ini tidak dapat dibatalkan.")) return;
+  STORE = {done:{}, notes:{}, quiz:{}, checklist:{}};
+  saveStore(STORE);
+  STATE = {view:"dashboard", moduleId:null, tab:"pedagogi", dbFilter:"", glosFilter:"", quizAnswers:{}, quizSubmitted:false};
+  renderNav(); render();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+(function init(){
+  if(STORE.quiz && Object.keys(STORE.quiz).length){ STATE.quizAnswers = STORE.quiz; }
+  renderNav();
+  render();
+})();
+</script>
+</body>
+</html>
